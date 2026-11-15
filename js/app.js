@@ -1139,6 +1139,10 @@
     h += '<div class="set-box"><h3>' + ic('play') + ' 试听</h3><div class="try-row">' +
       '<button class="btn" data-act="speak" data-text="春天来了，我们一起读课文。" data-lang="zh">' + ic('speaker') + '试听中文</button>' +
       '<button class="btn" data-act="speak" data-text="Hello! Nice to meet you." data-lang="en">' + ic('speaker') + '试听英文</button></div></div>';
+    h += '<div class="set-box"><h3>' + ic('speaker') + ' 答题音效</h3>' +
+      '<div class="try-row"><button class="btn" data-act="sound-toggle" id="set-sound">' +
+      (window.Sound && window.Sound.isEnabled() ? '答题音效：开（点此关闭）' : '答题音效：关（点此开启）') +
+      '</button><span class="set-note">答对播放清脆提示音，答错播放低沉提示音。</span></div></div>';
     h += '<div class="set-box"><h3>' + ic('info') + ' 实现方式</h3><p>使用浏览器内置 Web Speech API 语音合成，离线可用、无需 API Key、无任何调用费用。' +
       '若某个音色无法发音，切换到「自动选择」或换用 Edge / Chrome 浏览器。</p></div>';
     openModal('语音设置', h);
@@ -1164,6 +1168,7 @@
     if (!q || card.dataset.done) return;
     card.dataset.done = '1';
     var ok = oi === q.a;
+    if (window.Sound) window.Sound.play(ok);
     Array.prototype.slice.call(card.querySelectorAll('.quiz-opt')).forEach(function (b, j) {
       b.classList.add(j === q.a ? 'correct' : (j === oi ? 'wrong' : 'dim'));
       b.disabled = true;
@@ -1224,6 +1229,11 @@
         SP.speak(text, { lang: lang, onend: function () { el.classList.remove('speaking'); } });
         break;
       }
+      case 'sound-toggle': {
+        if (window.Sound) window.Sound.setEnabled(!window.Sound.isEnabled());
+        openSettings();
+        break;
+      }
       case 'stop':
         SP.stop();
         if (S.writer) { SB.call(S.writer, 'cancelQuiz'); SB.call(S.writer, 'showCharacter'); }
@@ -1281,6 +1291,7 @@
         var q = ch.questions[ch.idx];
         if (ch.picked === q.a) ch.right++;
         else ch.wrong.push({ q: q.q, correct: q.options[q.a], e: q.e });
+        if (window.Sound) window.Sound.play(ch.picked === q.a);
         renderMain();
         break;
       }
@@ -1389,6 +1400,7 @@
         } else {
           dr.wrong.push({ q: dq.q, correct: dq.a, tip: dq.tip }); dr.streak = 0;
         }
+        if (window.Sound) window.Sound.play(String(dq.opts[dr.picked]) === String(dq.a));
         markVisited('drill');
         renderMain();
         break;
