@@ -25,6 +25,10 @@
     '3|chinese|下': '第一单元 1 古诗三首（绝句·惠崇春江晚景·三衢道中）|2 燕子|3 荷花|4* 昆虫备忘录|第二单元 5 守株待兔|6 陶罐和铁罐|7 鹿角和鹿腿|8* 池子与河流|第三单元 9 古诗三首（元日·清明·九月九日忆山东兄弟）|10 纸的发明|11 赵州桥|12* 一幅名扬中外的画|第四单元 13 花钟|14 蜜蜂|15* 小虾|第五单元 16 童年的水墨画|17 剃头大师|18 肥皂泡|19* 我不能失信|第六单元 20 我们奇妙的世界|21 海底世界|22 火烧云|第七单元 23 慢性子裁缝和急性子顾客|24* 方帽子店|25* 漏|26* 枣核',
     '4|chinese|上': '第一单元 1 观潮|2 走月亮|3* 现代诗二首|4* 繁星|第二单元 5 一个豆荚里的五粒豆|6 夜间飞行的秘密|7 呼风唤雨的世纪|8* 蝴蝶的家|第三单元 9 古诗三首（暮江吟·题西林壁·雪梅）|10 爬山虎的脚|11 蟋蟀的住宅|第四单元 12 盘古开天地|13 精卫填海|14 普罗米修斯|15* 女娲补天|第五单元 16 麻雀|17 爬天都峰|第六单元 18 牛和鹅|19 一只窝囊的大老虎|20 陀螺|第七单元 21 古诗三首（出塞·凉州词·夏日绝句）|22 为中华之崛起而读书|23* 梅兰芳蓄须|24* 延安，我把你追寻|第八单元 25 王戎不取道旁李|26 西门豹治邺|27* 故事二则',
     '4|chinese|下': '第一单元 1 古诗词三首（宿新市徐公店·四时田园杂兴·清平乐·村居）|2 乡下人家|3* 天窗|4* 三月桃花水|第二单元 5 琥珀|6 飞向蓝天的恐龙|7 纳米技术就在我们身边|8* 千年梦圆在今朝|第三单元 9 短诗三首|10 绿|11 白桦|12* 在天晴了的时候|第四单元 13 猫|14 母鸡|15 白鹅|第五单元 16 海上日出|17 记金华的双龙洞|第六单元 18 文言文二则|19* 小英雄雨来|20* 我们家的男子汉|21* 芦花鞋|第七单元 22 古诗三首（芙蓉楼送辛渐·塞下曲·墨梅）|23 “诺曼底号”遇难记|24* 黄继光|第八单元 25 宝葫芦的秘密|26 巨人的花园|27* 海的女儿',
+    '5|chinese|上': '第一单元 1 白鹭|2 落花生|3 桂花雨|4* 珍珠鸟|第二单元 5 搭石|6 将相和|7 什么比猎豹的速度更快|8* 冀中的地道战|第三单元 9 猎人海力布|10 牛郎织女（一）|11* 牛郎织女（二）|第四单元 12 古诗三首（示儿·题临安邸·己亥杂诗）|13 少年中国说（节选）|14 圆明园的毁灭|15* 小岛|第五单元 16 太阳|17 松鼠|第六单元 18 慈母情深|19 父爱之舟|20* “精彩极了”和“糟糕透了”|第七单元 21 古诗词三首（山居秋暝·枫桥夜泊·长相思）|22 四季之美|23 鸟的天堂|24* 月迹|第八单元 25 古人谈读书|26 忆读书|27* 我的“长生果”',
+    '5|chinese|下': '第一单元 1 古诗三首（四时田园杂兴·稚子弄冰·村晚）|2 祖父的园子|3* 月是故乡明|4* 梅花魂|第二单元 5 草船借箭|6 景阳冈|7* 猴王出世|8* 红楼春趣|第三单元 综合性学习：遨游汉字王国（汉字真有趣·我爱你，汉字）|第四单元 9 古诗三首（从军行·秋夜将晓出篱门迎凉有感·闻官军收河南河北）|10 青山处处埋忠骨|11 军神|12* 清贫|第五单元 13 人物描写一组|14 刷子李|第六单元 15 自相矛盾|16 田忌赛马|17 跳水|第七单元 18 威尼斯的小艇|19 牧场之国|20* 金字塔|第八单元 21 杨氏之子|22 手指|23* 童年的发现',
+    '6|chinese|上': '第一单元 1 草原|2 丁香结|3 古诗词三首（宿建德江·六月二十七日望湖楼醉书·西江月·夜行黄沙道中）|4* 花之歌|第二单元 5 七律·长征|6 狼牙山五壮士|7 开国大典|8* 灯光|第三单元 9 竹节人|10 宇宙生命之谜|11* 故宫博物院|第四单元 12 桥|13 穷人|14* 在柏林|第五单元 15 夏天里的成长|16 盼|第六单元 17 古诗三首（浪淘沙·江南春·书湖阴先生壁）|18 只有一个地球|19* 三黑和土地|20* 青山不老|第七单元 21 文言文二则（伯牙鼓琴·书戴嵩画牛）|22 月光曲|23* 京剧趣谈|第八单元 24 少年闰土|25 好的故事|26* 我的伯父鲁迅先生|27* 有的人',
+    '6|chinese|下': '第一单元 1 北京的春节|2 腊八粥|3 古诗三首（寒食·迢迢牵牛星·十五夜望月）|4* 藏戏|第二单元 5 鲁滨逊漂流记（节选）|6* 骑鹅旅行记（节选）|7* 汤姆·索亚历险记（节选）|第三单元 8 匆匆|9 那个星期天|第四单元 10 古诗三首（马诗·石灰吟·竹石）|11 十六年前的回忆|12 为人民服务|13* 董存瑞舍身炸暗堡|第五单元 14 文言文二则（学弈·两小儿辩日）|15 真理诞生于一百个问号之后|16* 表里的生物|17* 他们那时候多有趣啊|第六单元 综合性学习：难忘小学生活（回忆往事·依依惜别）|古诗词诵读（采薇·送元二使安西·春夜喜雨·早春呈水部张十八员外·江上渔者·泊船瓜洲·游园不值·卜算子·送鲍浩然之浙东·浣溪沙·清平乐）',
 
     /* ===== 数学 · 人教版 ===== */
     '1|math|上': '准备课|位置|1~5的认识和加减法|认识图形（一）|6~10的认识和加减法|11~20各数的认识|认识钟表|20以内的进位加法|总复习',
@@ -35,6 +39,10 @@
     '3|math|下': '位置与方向（一）|除数是一位数的除法|复式统计表|两位数乘两位数|面积|年、月、日|小数的初步认识|数学广角—搭配（二）|总复习',
     '4|math|上': '大数的认识|公顷和平方千米|角的度量|三位数乘两位数|平行四边形和梯形|除数是两位数的除法|条形统计图|数学广角—优化|总复习',
     '4|math|下': '四则运算|观察物体（二）|运算定律|小数的意义和性质|三角形|小数的加法和减法|图形的运动（二）|平均数与条形统计图|数学广角—鸡兔同笼|总复习',
+    '5|math|上': '小数乘法|位置|小数除法|可能性|简易方程|多边形的面积|数学广角—植树问题|总复习',
+    '5|math|下': '观察物体（三）|因数与倍数|长方体和正方体|分数的意义和性质|图形的运动（三）|分数的加法和减法|折线统计图|数学广角—找次品|总复习',
+    '6|math|上': '分数乘法|位置与方向（二）|分数除法|比|圆|百分数（一）|扇形统计图|数学广角—数与形|总复习',
+    '6|math|下': '负数|百分数（二）|圆柱与圆锥|比例|数学广角—鸽巢问题|整理与复习',
 
     /* ===== 英语 · 教科版（广州版，三年级起点） =====
      * 三上/三下/四上 采用 2024—2025 起启用之新修订目录（Unit 制）；
@@ -47,7 +55,11 @@
     '3|english|上': 'Module 1 Greetings · Unit 1 Hello!|Unit 2 How are you?|Unit 3 What\u2019s your name?|Unit 4 This is my dad|Unit 5 Wash your face|Unit 6 Touch your head|Unit 7 A picture of my family|Unit 8 Who\u2019s that lady?|Unit 9 Is it a cat?|Unit 10 I have a ship|Unit 11 Do you have a pencil?|Unit 12 Put it on the desk',
     '3|english|下': 'Unit 1 Get Up|Unit 2 What a Day!|Unit 3 Plan My Day|Unit 4 Come and Join Us!|Unit 5 Our Classroom, Our Call|Unit 6 I\u2019m on Duty|Unit 7 School Rules|Unit 8 A Polite Way|Review Road Helper Day',
     '4|english|上': 'Unit 1 Come on In!|Unit 2 Help Yourself|Unit 3 I\u2019m the Chef Today!|Unit 4 Help Out in the Kitchen|Unit 5 She Helps Me a Lot|Unit 6 I Love My Family|Unit 7 Family Time|Unit 8 Joy in the Air|Review Happy New Year!',
-    '4|english|下': 'Module 1 People · Unit 1 He looks like a cook.|Unit 2 She is very kind.|Module 2 Daily routine · Unit 3 It\u2019s time to get up.|Unit 4 When do you have class?|Module 3 Days of the week|Module 4 Activities|Module 5 Sports|Module 6 Celebrations|Module 7 Let\u2019s look back'
+    '4|english|下': 'Module 1 People · Unit 1 He looks like a cook.|Unit 2 She is very kind.|Module 2 Daily routine · Unit 3 It\u2019s time to get up.|Unit 4 When do you have class?|Module 3 Days of the week|Module 4 Activities|Module 5 Sports|Module 6 Celebrations|Module 7 Let\u2019s look back',
+    '5|english|上': 'Module 1 Hobbies · Unit 1 What\u2019s your hobby?|Unit 2 His hobby is drawing|Module 2 Abilities · Unit 3 I can swim very fast|Unit 4 Can you do homework?|Module 3 Daily life · Unit 5 Where is Ben?|Unit 6 At the weekend|Module 4 Foods and drinks · Unit 7 Do you want coffee or tea?|Unit 8 Let\u2019s have both|Module 5 Foods we need · Unit 9 It smells delicious|Unit 10 Different tastes|Module 6 Weather · Unit 11 What\u2019s the weather like today?|Unit 12 Four seasons in one day|Module 7 Let\u2019s look back',
+    '5|english|下': 'Module 1 Seasons · Unit 1 What\u2019s your favourite season?|Unit 2 It\u2019s the middle of winter|Module 2 Plans · Unit 3 We are going to have an English test|Unit 4 Have a good time in Hainan|Module 3 Invitations · Unit 5 Would you like to go with us?|Unit 6 See you at the party|Module 4 Travel · Unit 7 We will go by train|Unit 8 Ben\u2019s first trip to Beijing|Module 5 Safety · Unit 9 Be careful!|Unit 10 How to stay safe|Module 6 Directions · Unit 11 Can you tell me the way?|Unit 12 I know a short cut|Module 7 Let\u2019s look back',
+    '6|english|上': 'Module 1 Country life · Unit 1 What are those farmers doing?|Unit 2 A country life is a healthy life|Module 2 City life · Unit 3 Where are you from?|Unit 4 I like the city very much|Module 3 Health · Unit 5 What\u2019s the matter with you?|Unit 6 The secret of good health|Module 4 Past experiences · Unit 7 What did you do yesterday?|Unit 8 A trip to Hong Kong|Module 5 Changes · Unit 9 Was I a good girl back then?|Unit 10 Then and now|Module 6 Festivals · Unit 11 I like the Spring Festival best|Unit 12 Christmas|Module 7 Let\u2019s look back',
+    '6|english|下': 'Module 1 Stories · Unit 1 Slow and steady wins the race|Unit 2 Waiting for another hare|Module 2 Animals · Unit 3 What animal is it?|Unit 4 We can save the animals|Module 3 Famous people · Unit 5 Dr Sun Yatsen|Unit 6 Steve Jobs|Module 4 Good manners · Unit 7 It\u2019s the polite thing to do|Unit 8 The magic words|Module 5 Travel abroad · Unit 9 Where will you go?|Unit 10 I can\u2019t wait to see you|Module 6 Let\u2019s look back'
   };
 
   /* ---------- 学段骨架 ----------
@@ -55,7 +67,7 @@
    * 预留扩展时把年级号从 planned 移入 ready，并补齐 catalog + 单元数据即可。
    */
   var stages = [
-    { id: 'primary', label: '小学', short: '小', grades: [1, 2, 3, 4, 5, 6], ready: [1, 2, 3, 4], planned: [5, 6] },
+    { id: 'primary', label: '小学', short: '小', grades: [1, 2, 3, 4, 5, 6], ready: [1, 2, 3, 4, 5, 6], planned: [] },
     { id: 'junior', label: '初中', short: '初', grades: [7, 8, 9], ready: [], planned: [7, 8, 9],
       textbooks: { chinese: '统编版', math: '人教版', english: '上海教育版（广州）' },
       extraSubjects: ['物理', '化学', '生物', '道德与法治', '历史', '地理'] },
@@ -98,10 +110,10 @@
   };
 
   var extensionGuide = [
-    { step: '1', title: '新增一个年级（例如五年级）', body: '打开 js/config.js，把 5 从 primary.planned 移入 primary.ready；在 catalog 中按 \u201c5|chinese|上\u201d 等键补上该册目录，一行一个单元，用竖线分隔。' },
+    { step: '1', title: '新增一个年级（如初中七年级）', body: '打开 js/config.js，把年级号从对应学段的 planned 移入 ready；在 catalog 中按 \u201c7|chinese|上\u201d 等键补上该册目录，一行一个单元，用竖线分隔。小学 1—6 年级目录已全部补齐并启用。' },
     { step: '2', title: '把某一课升级为精编内容', body: '课本目录里的每一课都能直接打开学习：46 个精编单元在 js/data-core.js（语文、数学）与 js/data-english.js（英语）；其余课次由 js/data-basic.js 按目录标题自动生成「通用教学示范内容」（预习目标、字词、练习题、跟读短文、分层作业），点开六大模块都有内容。若要为某一课换成精编内容，只需按同样的键新增一条单元数据，精编内容会自动优先，无需改动任何业务代码。' },
     { step: '3', title: '补充新模块的内容', body: '语文「生字笔顺」读取该单元 words 中的单字；165 个精编生字的笔顺在 js/stroke-data.js，602 个课本目录标题汉字的笔顺、拼音、组词在 js/hanzi-extra.js，字形信息在 js/hanzi-meta.js。「课文原文」与英语示范对话放在 js/data-text.js、js/data-text-init.js；数学「口算闯关」题型在 js/math-drill.js。模块标签由 moduleSets 自动编排。' },
-    { step: '4', title: '扩展到初中 / 高中', body: '初中（7—9 年级）、高中（10—12 年级）的年级槽位与教材版本已在 stages 中预留，并预置了物理、化学、生物等学科名。按第 1、2 步操作即可；如需新增学科，在 subjects 中追加一个对象，并在 moduleSets 中给出模块顺序，四大基础模块会自动套用。' },
+    { step: '4', title: '扩展到初中 / 高中', body: '小学 1—6 年级已全部启用（统编语文 / 人教数学 / 教科版广州英语）。初中（7—9 年级）、高中（10—12 年级）的年级槽位与教材版本已在 stages 中预留，并预置了物理、化学、生物等学科名。按第 1、2 步操作即可；如需新增学科，在 subjects 中追加一个对象，并在 moduleSets 中给出模块顺序，四大基础模块会自动套用。' },
     { step: '5', title: '更换教材版本或修订目录', body: '只需修改 catalog 中对应的目录字符串与 subjects 中的 textbook 字段。2024 年起义务教育教材逐年修订，广州英语三、四年级已启用新版 Unit 制目录，请以孩子学校实际发放的课本为准核对。' },
     { step: '6', title: '语音、原文与数据说明', body: '发音使用浏览器内置语音合成（Web Speech API），无需联网、无需 API Key、零费用；中文 zh-CN，英文 en-US，可在顶部设置中调速与切换音色。笔顺动画库与汉字数据全部本地内置。教材现代课文与英语课本对话未收录，可用「录入课本原文」按实际课本自行录入，内容只存本机。学习进度同样保存在本机浏览器，不上传任何数据。' }
   ];
@@ -110,7 +122,7 @@
     appName: '穗学伴',
     appSubTitle: '广州小学同步学习资料',
     region: '广州市',
-    version: '1.2.1',
+    version: '1.3.0',
     storageKey: 'suixueban_progress_v1',
     textStorageKey: 'suixueban_texts_v1',
     volumes: ['上', '下'],

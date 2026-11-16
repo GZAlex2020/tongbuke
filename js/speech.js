@@ -15,6 +15,7 @@
   var voices = [];
   var listeners = [];
   var seqToken = 0;
+  var speakToken = 0;   // 每次新朗读/停止自增，用于作废尚未真正播放的延迟任务
   var playing = false;
 
   var settings = {
@@ -93,6 +94,30 @@
     return 'zh';
   }
 
+  /* ---- 朗读预热（关键）----
+   * Chrome / Edge 首次调用 speak() 前会惰性初始化语音服务，常常卡 2~5 秒；
+   * 页面加载后用一个「静音的空语句」先把引擎唤醒，之后点击即时响应。
+   * 必须在用户手势/加载早期触发，且不能影响正在播放的内容。 */
+  var primeStarted = false;
+  function prime() {
+    if (!supported || primeStarted) return;
+    try {
+      var p = new Utter(' ');
+      p.volume = 0; p.rate = 1; p.lang = LANGS.zh;
+      p.onstart = function () { primeStarted = true; };
+      /* 只在还没有任何真实朗读请求时清场；若用户已点击，绝不能 cancel 掉真实语句 */
+      p.onend = function () { if (speakToken === 0) { try { synth.cancel(); } catch (e) {} } };
+      synth.speak(p);
+    } catch (e) {}
+  }
+  if (supported) {
+    prime();
+    // 有些浏览器要求用户手势后才能发声，补一次手势触发的预热
+    ['pointerdown', 'keydown', 'touchstart'].forEach(function (evt) {
+      document.addEventListener(evt, prime, { once: true, passive: true });
+    });
+  }
+
   /**
    * 朗读一段文本
    * @param {string} text
@@ -105,8 +130,15 @@
       return false;
     }
     var langKey = normalizeLang(opt.lang);
+    var token = ++speakToken;
     try {
-      if (synth.speaking || synth.pending) synth.cancel();
+      /* 关键：Chrome/Edge 里 cancel() 之后「同步」再 speak() 会被内核排队，
+       * 通常要等上一个语句的终止流程走完（几秒）才出声。
+       * 做法：先 cancel，再把真正的 speak 放进下一个定时器（脱离当前任务栈）。
+       * 这样既立刻响应点击，又避免与上一次朗读的 cancel 竞态。 */
+      if (synth.speaking || synth.pending || synth.paused) {
+        try { synth.cancel(); } catch (e) {}
+      }
       var u = new Utter(String(text));
       var v = pickVoice(langKey);
       if (v) u.voice = v;
@@ -115,10 +147,23 @@
       u.pitch = settings.pitch;
       u.volume = 1;
       if (opt.onstart) u.onstart = opt.onstart;
-      u.onend = function () { setPlaying(false); if (opt.onend) opt.onend(); };
-      u.onerror = function (e) { setPlaying(false); if (opt.onerror) opt.onerror(e); else if (opt.onend) opt.onend(); };
+      u.onend = function () { if (token === speakToken) setPlaying(false); if (opt.onend) opt.onend(); };
+      u.onerror = function (e) {
+        if (token === speakToken) setPlaying(false);
+        if (opt.onerror) opt.onerror(e); else if (opt.onend) opt.onend();
+      };
       setPlaying(true);
-      synth.speak(u);
+      setTimeout(function () {
+        if (token !== speakToken) return;   // 期间又点了停止/别的朗读，作废
+        try {
+          // Chrome 有时在 cancel() 后把引擎留在 paused 状态，显式 resume 兜底
+          if (synth.paused) { try { synth.resume(); } catch (e) {} }
+          synth.speak(u);
+        } catch (e) {
+          setPlaying(false);
+          if (opt.onerror) opt.onerror(e); else if (opt.onend) opt.onend();
+        }
+      }, 30);
       return true;
     } catch (e) {
       setPlaying(false);
@@ -129,6 +174,7 @@
 
   function stop() {
     seqToken++;
+    speakToken++;   // 作废尚未进入 synth 队列的 speak，避免停止后又冒出声音
     if (supported) { try { synth.cancel(); } catch (e) {} }
     setPlaying(false);
   }
