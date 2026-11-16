@@ -924,19 +924,64 @@
     });
     h += '</div></section>';
 
+    /* 九九乘法表：点读 + 逐行跟读 + 整表连读 */
+    var mRows = MD.multiTable();
+    var mRate = SP.getSettings().rate;
+    var mCount = 0;
+    mRows.forEach(function (r) { mCount += r.length; });
     h += '<section class="card mult-card">' +
-      sectionHead('calc', '九九乘法表', '点任意一格听口诀，二年级重点；可用来求商') + '<div class="mult-grid">';
-    MD.multiTable().forEach(function (row, ri) {
-      h += '<div class="mult-row">';
+      sectionHead('calc', '九九乘法表 · 可发音', '点格子读「算式＋口诀」；整表／逐行连读按口诀节奏背诵') +
+      '<div class="mult-toolbar">' +
+        '<button class="btn primary mult-play-all" data-act="mult-play-all">' + ic('play') + '整表连读</button>' +
+        '<button class="btn" data-act="stop">' + ic('stop') + '停止</button>' +
+        '<span class="mult-count">共 ' + mCount + ' 句口诀</span>' +
+        '<div class="rate-ctl"><span>语速</span>' +
+          '<input type="range" min="0.5" max="1.3" step="0.05" value="' + mRate + '" data-act="rate">' +
+          '<b class="rate-val">' + Number(mRate).toFixed(2) + '×</b></div>' +
+      '</div>';
+    if (!SP.supported) {
+      h += '<div class="notice-bar soft">' + ic('info') +
+        '<span>当前浏览器不支持语音合成。请改用 Edge 或 Chrome，并确认系统已安装中文语音包；也可在右上角「设置」里试听音色。</span></div>';
+    }
+    h += '<div class="mult-grid">';
+    var mi = 0;
+    mRows.forEach(function (row, ri) {
+      h += '<div class="mult-line">' +
+        '<button class="mult-row-play" data-act="mult-play-row" data-v="' + ri + '" title="跟读第 ' + (ri + 1) + ' 行">' +
+          ic('speaker') + '<b>' + (ri + 1) + '</b></button><div class="mult-row">';
       for (var pad = 0; pad < ri; pad++) h += '<span class="mult-empty"></span>';
       row.forEach(function (c) {
-        h += '<button class="mult-cell" data-act="speak" data-text="' + esc(c.text) + '" data-lang="zh">' +
+        /* 单格点读：算式 + 结果 + 口诀，便于把算式和口诀对应起来 */
+        var full = c.a + ' 乘 ' + c.b + ' 等于 ' + c.s + '。' + c.text;
+        h += '<button class="mult-cell" data-act="speak" data-text="' + esc(full) + '" data-lang="zh" ' +
+          'data-mi="' + mi + '" data-mr="' + ri + '" title="点读：' + esc(full) + '">' +
+          '<span class="mult-ic">' + ic('speaker') + '</span>' +
           '<b>' + c.a + '×' + c.b + '</b><span>' + esc(c.text) + '</span></button>';
+        mi++;
       });
-      h += '</div>';
+      h += '</div></div>';
     });
-    h += '</div></section>';
+    h += '</div>';
+    h += '<div class="read-hint">' + ic('info') + '<span>跟读三步：① 点「整表连读」听一遍口诀节奏 → ' +
+      '② 点每行左侧小喇叭，一行一行跟着读 → ③ 点单个格子重听易错的那一句（会连算式一起读）。' +
+      '听不到声音时，到「设置」里试听音色或检查系统中文语音包。</span></div>';
+    h += '</section>';
     return h;
+  }
+
+  /** 乘法表口诀文本（连读用，保持短促节奏） */
+  function multChant() {
+    var out = [];
+    MD.multiTable().forEach(function (row) {
+      row.forEach(function (c) { out.push({ text: c.text, lang: 'zh' }); });
+    });
+    return out;
+  }
+  function clearMultHighlight() {
+    $$('.mult-cell').forEach(function (n) { n.classList.remove('on'); });
+    $$('.mult-cell.speaking').forEach(function (n) { n.classList.remove('speaking'); });
+    $$('.mult-row-play.speaking').forEach(function (n) { n.classList.remove('speaking'); });
+    $$('.mult-play-all.speaking').forEach(function (n) { n.classList.remove('speaking'); });
   }
 
   /* ---------------- 模块四：通关挑战 ---------------- */
@@ -1224,9 +1269,36 @@
       }
       case 'speak': {
         SP.stop();
+        clearMultHighlight();
         var text = el.dataset.text, lang = el.dataset.lang;
         el.classList.add('speaking');
         SP.speak(text, { lang: lang, onend: function () { el.classList.remove('speaking'); } });
+        break;
+      }
+      case 'mult-play-all': {
+        clearMultHighlight();
+        el.classList.add('speaking');
+        SP.speakSequence(multChant(), {
+          lang: 'zh',
+          onItem: function (i) {
+            $$('.mult-cell').forEach(function (n) { n.classList.toggle('on', +n.dataset.mi === i); });
+          },
+          onDone: function () { clearMultHighlight(); }
+        });
+        break;
+      }
+      case 'mult-play-row': {
+        var mr = +v, mAll = MD.multiTable();
+        if (!mAll[mr]) break;
+        clearMultHighlight();
+        el.classList.add('speaking');
+        SP.speakSequence(mAll[mr].map(function (c) { return { text: c.text, lang: 'zh' }; }), {
+          lang: 'zh',
+          onItem: function (i) {
+            $$('.mult-cell[data-mr="' + mr + '"]').forEach(function (n, j) { n.classList.toggle('on', j === i); });
+          },
+          onDone: function () { clearMultHighlight(); }
+        });
         break;
       }
       case 'sound-toggle': {
@@ -1239,6 +1311,7 @@
         if (S.writer) { SB.call(S.writer, 'cancelQuiz'); SB.call(S.writer, 'showCharacter'); }
         S.strokeQuiz = false;
         $$('.speaking').forEach(function (x) { x.classList.remove('speaking'); });
+        clearMultHighlight();
         $$('.line-item.on').forEach(function (x) { x.classList.remove('on'); });
         $$('.text-line.on').forEach(function (x) { x.classList.remove('on'); });
         break;
