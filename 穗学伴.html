@@ -3,13 +3,13 @@
   穗学伴 · 自包含离线版（构建产物）
   CSS 与全部 JS 已内联，零外部请求，不受浏览器脚本缓存影响。
   源文件在 css/ 与 js/ 下；修改后运行 node build.js 重新生成。
-  构建时间：2026-11-16T08:19:48.006Z
+  构建时间：2026-11-20T09:08:17.063Z
 -->
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- 版本号 v=1.3.0：每次改动资源后递增，避免浏览器把新旧脚本混用导致模块错乱 -->
+  <!-- 版本号 v=1.3.1：每次改动资源后递增，避免浏览器把新旧脚本混用导致模块错乱 -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
@@ -588,9 +588,12 @@ code { background: #eef2f8; padding: 1px 5px; border-radius: 5px; font-size: 12p
 .text-empty > .ic { width: 30px; height: 30px; color: var(--primary); margin: 0 auto 12px; }
 .text-empty h3 { font-size: 16px; margin-bottom: 8px; }
 .text-empty p { max-width: 620px; margin: 0 auto 16px; font-size: 12.5px; color: var(--text-2); line-height: 1.9; }
-.text-sec-head { display: flex; align-items: baseline; gap: 10px; margin: 18px 0 10px; padding-left: 10px; border-left: 3px solid var(--primary); }
-.text-sec-head h3 { font-size: 15px; }
-.text-sec-head span { font-size: 11.5px; color: var(--muted); }
+.text-sec-head { display: flex; align-items: center; gap: 10px; margin: 18px 0 10px; padding-left: 10px; border-left: 3px solid var(--primary); }
+.text-sec-head h3 { font-size: 15px; display: inline-flex; align-items: center; gap: 4px; }
+.text-sec-head span { font-size: 11.5px; color: var(--muted); display: inline-flex; align-items: center; gap: 4px; }
+.speak-btn.head-play { width: 22px; height: 22px; border-radius: 7px; }
+.speak-btn.head-play .ic { width: 13px; height: 13px; }
+.text-sec-head [data-rk].on { background: var(--primary-soft); border-radius: 6px; box-shadow: 0 0 0 2px rgba(58,109,240,.12); }
 .text-lines { display: flex; flex-direction: column; gap: 8px; }
 .text-line {
   display: flex; align-items: flex-start; gap: 11px; padding: 11px 13px;
@@ -863,7 +866,7 @@ code { background: #eef2f8; padding: 1px 5px; border-radius: 5px; font-size: 12p
     appName: '穗学伴',
     appSubTitle: '广州小学同步学习资料',
     region: '广州市',
-    version: '1.3.0',
+    version: '1.3.1',
     storageKey: 'suixueban_progress_v1',
     textStorageKey: 'suixueban_texts_v1',
     volumes: ['上', '下'],
@@ -3703,6 +3706,31 @@ var HanziWriter=function(){"use strict";var t;const e="undefined"==typeof window
     return out;
   }
 
+  /**
+   * 整篇连读的完整序列：每个小节依次朗读「诗名 → 作者 → 每一句」。
+   * 仅内置古诗文（kind='poem'）才有 title/author；对话/跟读短文没有，逻辑自然跳过。
+   * 每个条目带 kind 和索引，便于整篇连读时高亮到对应的 DOM 元素。
+   */
+  function flattenTextRead(data) {
+    var out = [];
+    var secs = data.sections || [];
+    var many = secs.length > 1;
+    secs.forEach(function (sec, si) {
+      // 诗名 / 小标题：多小节时必须读，便于区分是哪一首；单小节且有作者时也读
+      if (sec.title && (many || sec.author)) {
+        out.push({ t: sec.title, role: '', kind: 'title', si: si, li: -1, key: si + '-title' });
+      }
+      // 作者：朝代 · 姓名（朗读时把「 · 」读成停顿间隔即可，TTS 会自然处理）
+      if (sec.author) {
+        out.push({ t: sec.author, role: '', kind: 'author', si: si, li: -1, key: si + '-author' });
+      }
+      (sec.lines || []).forEach(function (l, li) {
+        out.push({ t: l.t, role: l.role || '', kind: 'line', si: si, li: li, key: si + '-' + li });
+      });
+    });
+    return out;
+  }
+
   /* ---------------- 通用片段 ---------------- */
   function sectionHead(icon, title, desc, extra) {
     return '<div class="sec-head"><div class="sec-title">' + ic(icon) + '<h3>' + esc(title) + '</h3></div>' +
@@ -4231,15 +4259,18 @@ var HanziWriter=function(){"use strict";var t;const e="undefined"==typeof window
     } else {
       var gi = 0;
       var secs = ctx.data.sections || [];
-      secs.forEach(function (sec) {
+      secs.forEach(function (sec, secIdx) {
         /* 单段短文的小标题与卡片标题重复，省略以把句子提前 */
         if (sec.title && (secs.length > 1 || sec.author)) {
-          h += '<div class="text-sec-head"><h3>' + esc(sec.title) + '</h3>' +
-            (sec.author ? '<span>' + esc(sec.author) + '</span>' : '') + '</div>';
+          h += '<div class="text-sec-head">' +
+            '<h3 data-rk="' + secIdx + '-title">' + esc(sec.title) +
+            speakBtn(sec.title, lang, '', 'head-play') + '</h3>' +
+            (sec.author ? '<span data-rk="' + secIdx + '-author">' + esc(sec.author) +
+              speakBtn(sec.author, lang, '', 'head-play') + '</span>' : '') + '</div>';
         }
         h += '<div class="text-lines">';
-        (sec.lines || []).forEach(function (l) {
-          h += '<div class="text-line' + (l.role ? ' has-role' : '') + '" data-ti="' + gi + '">' +
+        (sec.lines || []).forEach(function (l, li) {
+          h += '<div class="text-line' + (l.role ? ' has-role' : '') + '" data-ti="' + gi + '" data-rk="' + secIdx + '-' + li + '">' +
             (l.role ? '<span class="role-badge ' + roleCls(l.role) + '">' + esc(l.role) + '</span>' : '') +
             '<div class="tl-body"><div class="tl-t">' +
             (S.textHide ? '<span class="hidden-text">· · · · · · · ·</span>' : esc(l.t)) + '</div>' +
@@ -4893,14 +4924,18 @@ var HanziWriter=function(){"use strict";var t;const e="undefined"==typeof window
       /* ---- 课文原文跟读 ---- */
       case 'text-play-all': {
         var td = currentTextData(); if (!td.data) break;
-        var fl = flattenLines(td.data), lgT = currentLang();
+        var fl = flattenTextRead(td.data), lgT = currentLang();
         el.classList.add('speaking');
         SP.speakSequence(fl.map(function (x) { return { text: x.t, lang: lgT }; }), {
           lang: lgT,
-          onItem: function (i) { $$('.text-line').forEach(function (n, j) { n.classList.toggle('on', j === i); }); },
+          onItem: function (i) {
+            var key = fl[i] ? fl[i].key : '';
+            $$('[data-rk].on').forEach(function (n) { n.classList.remove('on'); });
+            if (key) { var n = $('[data-rk="' + key + '"]'); if (n) n.classList.add('on'); }
+          },
           onDone: function () {
             el.classList.remove('speaking');
-            $$('.text-line').forEach(function (n) { n.classList.remove('on'); });
+            $$('[data-rk].on').forEach(function (n) { n.classList.remove('on'); });
           }
         });
         break;
@@ -5000,7 +5035,7 @@ var HanziWriter=function(){"use strict";var t;const e="undefined"==typeof window
   <script>
   window.addEventListener('load', function () {
     setTimeout(function () {
-      var EXPECTED = '1.3.0';
+      var EXPECTED = '1.3.1';
       var C = window.APP_CONFIG;
       var content = document.getElementById('content');
       var tabsBox = document.querySelector('.module-tabs');

@@ -243,6 +243,31 @@
     return out;
   }
 
+  /**
+   * 整篇连读的完整序列：每个小节依次朗读「诗名 → 作者 → 每一句」。
+   * 仅内置古诗文（kind='poem'）才有 title/author；对话/跟读短文没有，逻辑自然跳过。
+   * 每个条目带 kind 和索引，便于整篇连读时高亮到对应的 DOM 元素。
+   */
+  function flattenTextRead(data) {
+    var out = [];
+    var secs = data.sections || [];
+    var many = secs.length > 1;
+    secs.forEach(function (sec, si) {
+      // 诗名 / 小标题：多小节时必须读，便于区分是哪一首；单小节且有作者时也读
+      if (sec.title && (many || sec.author)) {
+        out.push({ t: sec.title, role: '', kind: 'title', si: si, li: -1, key: si + '-title' });
+      }
+      // 作者：朝代 · 姓名（朗读时把「 · 」读成停顿间隔即可，TTS 会自然处理）
+      if (sec.author) {
+        out.push({ t: sec.author, role: '', kind: 'author', si: si, li: -1, key: si + '-author' });
+      }
+      (sec.lines || []).forEach(function (l, li) {
+        out.push({ t: l.t, role: l.role || '', kind: 'line', si: si, li: li, key: si + '-' + li });
+      });
+    });
+    return out;
+  }
+
   /* ---------------- 通用片段 ---------------- */
   function sectionHead(icon, title, desc, extra) {
     return '<div class="sec-head"><div class="sec-title">' + ic(icon) + '<h3>' + esc(title) + '</h3></div>' +
@@ -771,15 +796,18 @@
     } else {
       var gi = 0;
       var secs = ctx.data.sections || [];
-      secs.forEach(function (sec) {
+      secs.forEach(function (sec, secIdx) {
         /* 单段短文的小标题与卡片标题重复，省略以把句子提前 */
         if (sec.title && (secs.length > 1 || sec.author)) {
-          h += '<div class="text-sec-head"><h3>' + esc(sec.title) + '</h3>' +
-            (sec.author ? '<span>' + esc(sec.author) + '</span>' : '') + '</div>';
+          h += '<div class="text-sec-head">' +
+            '<h3 data-rk="' + secIdx + '-title">' + esc(sec.title) +
+            speakBtn(sec.title, lang, '', 'head-play') + '</h3>' +
+            (sec.author ? '<span data-rk="' + secIdx + '-author">' + esc(sec.author) +
+              speakBtn(sec.author, lang, '', 'head-play') + '</span>' : '') + '</div>';
         }
         h += '<div class="text-lines">';
-        (sec.lines || []).forEach(function (l) {
-          h += '<div class="text-line' + (l.role ? ' has-role' : '') + '" data-ti="' + gi + '">' +
+        (sec.lines || []).forEach(function (l, li) {
+          h += '<div class="text-line' + (l.role ? ' has-role' : '') + '" data-ti="' + gi + '" data-rk="' + secIdx + '-' + li + '">' +
             (l.role ? '<span class="role-badge ' + roleCls(l.role) + '">' + esc(l.role) + '</span>' : '') +
             '<div class="tl-body"><div class="tl-t">' +
             (S.textHide ? '<span class="hidden-text">· · · · · · · ·</span>' : esc(l.t)) + '</div>' +
@@ -1433,14 +1461,18 @@
       /* ---- 课文原文跟读 ---- */
       case 'text-play-all': {
         var td = currentTextData(); if (!td.data) break;
-        var fl = flattenLines(td.data), lgT = currentLang();
+        var fl = flattenTextRead(td.data), lgT = currentLang();
         el.classList.add('speaking');
         SP.speakSequence(fl.map(function (x) { return { text: x.t, lang: lgT }; }), {
           lang: lgT,
-          onItem: function (i) { $$('.text-line').forEach(function (n, j) { n.classList.toggle('on', j === i); }); },
+          onItem: function (i) {
+            var key = fl[i] ? fl[i].key : '';
+            $$('[data-rk].on').forEach(function (n) { n.classList.remove('on'); });
+            if (key) { var n = $('[data-rk="' + key + '"]'); if (n) n.classList.add('on'); }
+          },
           onDone: function () {
             el.classList.remove('speaking');
-            $$('.text-line').forEach(function (n) { n.classList.remove('on'); });
+            $$('[data-rk].on').forEach(function (n) { n.classList.remove('on'); });
           }
         });
         break;

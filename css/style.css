@@ -570,9 +570,12 @@ code { background: #eef2f8; padding: 1px 5px; border-radius: 5px; font-size: 12p
 .text-empty > .ic { width: 30px; height: 30px; color: var(--primary); margin: 0 auto 12px; }
 .text-empty h3 { font-size: 16px; margin-bottom: 8px; }
 .text-empty p { max-width: 620px; margin: 0 auto 16px; font-size: 12.5px; color: var(--text-2); line-height: 1.9; }
-.text-sec-head { display: flex; align-items: baseline; gap: 10px; margin: 18px 0 10px; padding-left: 10px; border-left: 3px solid var(--primary); }
-.text-sec-head h3 { font-size: 15px; }
-.text-sec-head span { font-size: 11.5px; color: var(--muted); }
+.text-sec-head { display: flex; align-items: center; gap: 10px; margin: 18px 0 10px; padding-left: 10px; border-left: 3px solid var(--primary); }
+.text-sec-head h3 { font-size: 15px; display: inline-flex; align-items: center; gap: 4px; }
+.text-sec-head span { font-size: 11.5px; color: var(--muted); display: inline-flex; align-items: center; gap: 4px; }
+.speak-btn.head-play { width: 22px; height: 22px; border-radius: 7px; }
+.speak-btn.head-play .ic { width: 13px; height: 13px; }
+.text-sec-head [data-rk].on { background: var(--primary-soft); border-radius: 6px; box-shadow: 0 0 0 2px rgba(58,109,240,.12); }
 .text-lines { display: flex; flex-direction: column; gap: 8px; }
 .text-line {
   display: flex; align-items: flex-start; gap: 11px; padding: 11px 13px;
