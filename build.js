@@ -34,14 +34,17 @@ html = html.replace(/<link rel="stylesheet" href="([^"?]+)(?:\?[^"]*)?">/g, func
 html = html.replace(/<script[^>]*\bsrc="([^"?]+)(?:\?[^"]*)?"[^>]*><\/script>/g, function (m, srcPath) {
   jsRefs.push(srcPath); return m;
 });
-const hzMatch = html.match(/window\.HZ_LIBS\s*=\s*\[([\s\S]*?)\];/);
-if (!hzMatch) throw new Error('模板缺少 window.HZ_LIBS 定义');
+const baseMatch = html.match(/window\.HZ_BASE\s*=\s*\[([\s\S]*?)\];/);
+const packsMatch = html.match(/window\.HZ_PACKS\s*=\s*\{([\s\S]*?)\};/);
+if (!baseMatch || !packsMatch) throw new Error('模板缺少 HZ_BASE / HZ_PACKS 定义');
 const hzLibs = [];
-hzMatch[1].replace(/'([^']+)'/g, function (m, p) { hzLibs.push(p); });
+baseMatch[1].replace(/'([^']+)'/g, function (m, p) { hzLibs.push(p); });
+packsMatch[1].replace(/'([^']+)'/g, function (m, p) { hzLibs.push(p); });
 
-const allRefs = Array.from(new Set(cssRefs.concat(jsRefs, hzLibs))).sort();
-if (!cssRefs.length || !jsRefs.length || hzLibs.length !== 7) {
-  throw new Error('资源清单异常：css=' + cssRefs.length + ' js=' + jsRefs.length + ' hz=' + hzLibs.length);
+const uniqueHz = Array.from(new Set(hzLibs));
+const allRefs = Array.from(new Set(cssRefs.concat(jsRefs, uniqueHz))).sort();
+if (!cssRefs.length || !jsRefs.length || uniqueHz.length < 6) {
+  throw new Error('资源清单异常：css=' + cssRefs.length + ' js=' + jsRefs.length + ' hz=' + uniqueHz.length);
 }
 allRefs.forEach(read); /* 提前校验存在性 */
 
@@ -67,7 +70,7 @@ out = out.replace(/<script[^>]*\bsrc="([^"?]+)(?:\?[^"]*)?"[^>]*><\/script>/g, f
 
 /* 动态字库：以字符串表内联，加载器优先从 __HZ_INLINE__ 执行 */
 const inlineMap = {};
-hzLibs.forEach(function (rel) { inlineMap[rel] = safeJs(read(rel)); });
+uniqueHz.forEach(function (rel) { inlineMap[rel] = safeJs(read(rel)); });
 const inlineJson = JSON.stringify(inlineMap).replace(/</g, '\\u003c');
 const anchor = '  window.__HZ_VER__ = ';
 if (out.indexOf(anchor) < 0) throw new Error('模板缺少 window.__HZ_VER__ 锚点');
@@ -79,7 +82,7 @@ if (cssCount !== cssRefs.length || jsCount !== jsRefs.length) {
 if (/<script src=|<link rel="stylesheet"/.test(out)) {
   throw new Error('仍存在外部资源引用，已中止');
 }
-if (out.indexOf('window.__HZ_INLINE__ = {"js/stroke-data.js"') < 0) {
+if (out.indexOf('window.__HZ_INLINE__ = {"vendor/hanzi-writer.min.js"') < 0) {
   throw new Error('字库内联失败，已中止');
 }
 
@@ -99,5 +102,5 @@ const outFile = path.join(distDir, '穗学伴.html');
 fs.writeFileSync(outFile, out, 'utf8');
 console.log('已生成: index.html（资源版本 ' + VER + '）');
 console.log('已生成: ' + outFile);
-console.log('内联 CSS ' + cssCount + ' / 静态 JS ' + jsCount + ' / 动态字库 ' + hzLibs.length +
+console.log('内联 CSS ' + cssCount + ' / 静态 JS ' + jsCount + ' / 动态字库包 ' + uniqueHz.length +
   '，大小 ' + (fs.statSync(outFile).size / 1024).toFixed(1) + ' KB');

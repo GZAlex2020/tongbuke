@@ -9,12 +9,13 @@
 (function () {
   'use strict';
 
-  var DATA = window.STROKE_DATA || {};
-  var META = window.HANZI_META || {};
+  /* 字库按年级异步注入，不能在模块顶层快照 */
+  function data() { return window.STROKE_DATA || {}; }
+  function meta() { return window.HANZI_META || {}; }
 
-  function has(ch) { return !!(DATA[ch] && DATA[ch].strokes && DATA[ch].strokes.length); }
-  function info(ch) { return META[ch] || { n: 0, order: [], radical: '', structure: '' }; }
-  function count(ch) { return has(ch) ? DATA[ch].strokes.length : 0; }
+  function has(ch) { var d = data()[ch]; return !!(d && d.strokes && d.strokes.length); }
+  function info(ch) { return meta()[ch] || { n: 0, order: [], radical: '', structure: '' }; }
+  function count(ch) { return has(ch) ? data()[ch].strokes.length : 0; }
 
   /* 田字格（米字格虚线可选） */
   function gridSvg(extra) {
@@ -29,7 +30,7 @@
   /* 逐笔分解图：第 step 步（1 起）的累积字形，当前笔红色 */
   function stepSvg(ch, step) {
     if (!has(ch)) return '';
-    var strokes = DATA[ch].strokes;
+    var strokes = data()[ch].strokes;
     var s = '<svg class="step-svg" viewBox="0 0 1024 1024" aria-hidden="true">';
     s += '<g fill="none" stroke="#ead9d6" stroke-width="2">' +
       '<rect x="6" y="6" width="1012" height="1012" stroke-width="3"/>' +
@@ -53,7 +54,7 @@
   /* 一次性生成某字全部分解图（供渲染） */
   function stepsHtml(ch, current) {
     if (!has(ch)) return '';
-    var n = DATA[ch].strokes.length, h = '';
+    var n = data()[ch].strokes.length, h = '';
     for (var i = 1; i <= n; i++) {
       var inf = info(ch);
       var name = (inf.order && inf.order[i - 1]) || '—';
@@ -84,7 +85,7 @@
         delayBetweenStrokes: 260,
         delayBetweenLoops: 900,
         charDataLoader: function (char, onComplete) {
-          onComplete(DATA[char] || null);
+          onComplete(data()[char] || null);
         }
       });
     } catch (e) { return null; }

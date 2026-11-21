@@ -1319,7 +1319,7 @@
           S.module = v; markVisited(v); SP.stop();
           var hzBox = $('#content');
           if (hzBox) hzBox.innerHTML = '<section class="card empty-card"><h3>正在准备生字卡…</h3><p>首次打开需加载离线笔顺数据，请稍候。</p></section>';
-          window.loadHanzi('module:strokes').catch(function () {
+          window.loadHanzi('module:strokes', S.grade).catch(function () {
             if (S.module !== 'strokes') return;
             var b2 = $('#content');
             if (b2) b2.innerHTML = '<section class="card empty-card"><h3>生字卡加载失败</h3><p>请检查网络后重试。</p><button class="btn primary" data-act="retry-hanzi">重新加载</button></section>';
@@ -1337,7 +1337,7 @@
         window.__hzPending = null; window.__hzLoaded = false;
         var retryBox = $('#content');
         if (retryBox) retryBox.innerHTML = '<section class="card empty-card"><h3>正在重新加载…</h3></section>';
-        window.loadHanzi('retry').catch(function () {
+        window.loadHanzi('retry', S.grade).catch(function () {
           var b3 = $('#content');
           if (b3 && S.module === 'strokes') b3.innerHTML = '<section class="card empty-card"><h3>生字卡加载失败</h3><p>请检查网络后重试。</p><button class="btn primary" data-act="retry-hanzi">重新加载</button></section>';
         });
@@ -1589,7 +1589,12 @@
     if (el.dataset.act === 'voice') SP.setVoice(el.dataset.lang, el.value);
   }
 
-  function renderAll() { renderSidebar(); renderTopbar(); renderMain(); }
+  function renderAll() {
+    window.SX_GRADE = S.grade;
+    /* 切换年级后按年级补齐对应字库小包（已就绪则直接返回） */
+    if (window.__hzBaseReady && window.loadHanzi) window.loadHanzi('grade:' + S.grade, S.grade).catch(function () {});
+    renderSidebar(); renderTopbar(); renderMain();
+  }
 
   /** 进入某册时，默认定位到第一个已填充内容的单元，避免首屏落在待建设页 */
   function firstReadyUnit() {

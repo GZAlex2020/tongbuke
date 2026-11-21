@@ -14,6 +14,8 @@ node build.js
 
 构建脚本会计算所有资源的 MD5 内容 hash（取前 8 位）并替换模板中的 `__VER__`。任一资源变化都会生成新的 URL 版本，避免浏览器混用新旧脚本。
 
+离线字库按年级拆包：`js/hanzi-g1~g4.js`、原有的 `hanzi-grade56.js` 与 `hanzi-junior.js`。首屏只加载笔顺引擎，空闲时仅预取当前年级小包；切换年级时按需补包。若增删了教学用字库源数据，运行 `node tools/split-hanzi.js` 重新生成年级包，再执行 `node build.js`。
+
 ## 版本回溯
 
 历史单文件快照不再留在仓库根目录。使用 git tag 与 Release 管理版本：

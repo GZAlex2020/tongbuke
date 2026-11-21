@@ -1,4 +1,4 @@
-<!-- 由 build.js 从 index.template.html 生成；资源版本 9b417b4b；请勿直接编辑 -->
+<!-- 由 build.js 从 index.template.html 生成；资源版本 9dc23d9a；请勿直接编辑 -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -7,7 +7,7 @@
   <!-- 版本号 v=1.6.0：每次改动资源后递增，避免浏览器把新旧脚本混用导致模块错乱 -->
   <meta name="description" content="广州中小学同步学习资料：小学 1—6 年级语文数学英语，初中 7—9 年级语数英及物理化学生物道德与法治历史地理，课前预习、课后复习、课本跟读、通关挑战，支持语音朗读。">
   <title>穗学伴 · 广州中小学同步学习资料</title>
-  <link rel="stylesheet" href="css/style.css?v=9b417b4b">
+  <link rel="stylesheet" href="css/style.css?v=9dc23d9a">
 </head>
 <body>
   <div class="app">
@@ -20,65 +20,89 @@
   <div id="modal-root"></div>
 
   <!-- ===== A. 骨架层：仅 config 同步，保证 app.js 执行时 APP_CONFIG 已就绪 ===== -->
-  <script src="js/config.js?v=9b417b4b"></script>
+  <script src="js/config.js?v=9dc23d9a"></script>
 
   <!-- ===== B. 首屏层：defer，不阻塞解析，DOMContentLoaded 前按序执行 ===== -->
-  <script defer src="js/data-core.js?v=9b417b4b"></script>
-  <script defer src="js/data-english.js?v=9b417b4b"></script>
-  <script defer src="js/data-text.js?v=9b417b4b"></script>
-  <script defer src="js/data-text-init.js?v=9b417b4b"></script>
-  <script defer src="js/data-subjects.js?v=9b417b4b"></script>
-  <script defer src="js/data-basic.js?v=9b417b4b"></script>
-  <script defer src="js/speech.js?v=9b417b4b"></script>
-  <script defer src="js/math-drill.js?v=9b417b4b"></script>
-  <script defer src="js/sound.js?v=9b417b4b"></script>
-  <script defer src="js/analytics.js?v=9b417b4b"></script>
-  <script defer src="js/app.js?v=9b417b4b"></script>
+  <script defer src="js/data-core.js?v=9dc23d9a"></script>
+  <script defer src="js/data-english.js?v=9dc23d9a"></script>
+  <script defer src="js/data-text.js?v=9dc23d9a"></script>
+  <script defer src="js/data-text-init.js?v=9dc23d9a"></script>
+  <script defer src="js/data-subjects.js?v=9dc23d9a"></script>
+  <script defer src="js/data-basic.js?v=9dc23d9a"></script>
+  <script defer src="js/speech.js?v=9dc23d9a"></script>
+  <script defer src="js/math-drill.js?v=9dc23d9a"></script>
+  <script defer src="js/sound.js?v=9dc23d9a"></script>
+  <script defer src="js/analytics.js?v=9dc23d9a"></script>
+  <script defer src="js/app.js?v=9dc23d9a"></script>
 
-  <!-- ===== C. 字库层：不进首屏，由 loader 按需 + idle 预取 ===== -->
+  <!-- ===== C. 字库层：基础引擎 + 按年级小包，不进首屏 ===== -->
   <script>
-  window.__HZ_VER__ = '9b417b4b';
-  window.HZ_LIBS = [
-    'js/stroke-data.js',
-    'js/hanzi-meta.js',
-    'js/hanzi-extra.js',
-    'js/hanzi-grade56.js',
-    'js/hanzi-junior.js',
+  window.__HZ_VER__ = '9dc23d9a';
+  /* 基础引擎很小：笔顺渲染器 + 元信息；字库小包按年级单独加载 */
+  window.HZ_BASE = [
     'vendor/hanzi-writer.min.js',
+    'js/hanzi-meta.js',
     'js/strokes.js'
   ];
-  window.__hzLoaded = false;   /* 是否已请求 */
-  window.__hzReady = false;    /* 是否已就绪 */
-  window.__hzPending = null;
-  window.loadHanzi = function (reason) {
-    if (window.__hzReady) return Promise.resolve();
-    if (window.__hzPending) return window.__hzPending;
+  window.HZ_PACKS = {
+    1: 'js/hanzi-g1.js', 2: 'js/hanzi-g2.js', 3: 'js/hanzi-g3.js', 4: 'js/hanzi-g4.js',
+    5: 'js/hanzi-grade56.js', 6: 'js/hanzi-grade56.js',
+    7: 'js/hanzi-junior.js', 8: 'js/hanzi-junior.js', 9: 'js/hanzi-junior.js'
+  };
+  window.__hzBaseReady = false;
+  window.__hzPacks = {};
+  window.__hzPending = {};
+  window.__hzLoaded = false;
+  window.__hzReady = false;
+
+  function loadHzScript(src) {
+    return new Promise(function (res, rej) {
+      var code = (window.__HZ_INLINE__ || {})[src];
+      if (code != null) {
+        try { window.eval(code); res(); } catch (e) { rej(e); }
+        return;
+      }
+      var t = document.createElement('script');
+      t.src = src + (window.__HZ_VER__ && window.__HZ_VER__ !== '9dc23d9a' ? '?v=' + window.__HZ_VER__ : '');
+      t.onload = res; t.onerror = rej;
+      document.head.appendChild(t);
+    });
+  }
+
+  window.loadHanzi = function (reason, grade) {
+    var g = grade || window.SX_GRADE || 1;
+    var pack = window.HZ_PACKS[g] || window.HZ_PACKS[1];
     window.__hzLoaded = true;
-    window.__hzPending = Promise.all(window.HZ_LIBS.map(function (src) {
-      return new Promise(function (res, rej) {
-        var code = (window.__HZ_INLINE__ || {})[src];
-        if (code != null) {
-          try { window.eval(code); res(); } catch (e) { rej(e); }
-          return;
-        }
-        var t = document.createElement('script');
-        t.src = src + (window.__HZ_VER__ && window.__HZ_VER__ !== '9b417b4b' ? '?v=' + window.__HZ_VER__ : '');
-        t.onload = res; t.onerror = rej;
-        document.head.appendChild(t);
-      });
-    })).then(function () {
-      window.__hzReady = true;
-      document.dispatchEvent(new CustomEvent('hanzi:ready', { detail: reason }));
-    }).catch(function (e) {
-      window.__hzLoaded = false;
-      window.__hzPending = null;
+    var jobs = [];
+    if (!window.__hzBaseReady) {
+      if (!window.__hzPending.__base) {
+        window.__hzPending.__base = Promise.all(window.HZ_BASE.map(loadHzScript)).then(function () {
+          window.__hzBaseReady = true;
+        }).catch(function (e) { window.__hzPending.__base = null; throw e; });
+      }
+      jobs.push(window.__hzPending.__base);
+    }
+    if (window.__hzPacks[pack] !== 'ready') {
+      if (!window.__hzPending[pack]) {
+        window.__hzPending[pack] = loadHzScript(pack).then(function () {
+          window.__hzPacks[pack] = 'ready';
+          window.__hzReady = window.__hzBaseReady;
+          document.dispatchEvent(new CustomEvent('hanzi:ready', {
+            detail: { reason: reason, grade: g, pack: pack }
+          }));
+        }).catch(function (e) { window.__hzPending[pack] = null; throw e; });
+      }
+      jobs.push(window.__hzPending[pack]);
+    }
+    if (!jobs.length) return Promise.resolve();
+    return Promise.all(jobs).catch(function (e) {
+      window.__hzReady = window.__hzBaseReady && window.__hzPacks[pack] === 'ready';
       throw e;
     });
-    return window.__hzPending;
   };
-  /* 空闲预取：首屏渲染完 + 主线程空了再偷偷下；用户点「生字」时通常已就绪 */
+  /* 空闲预取：只预取当前年级小包，不再全量拉取 2.4 MB 字库 */
   addEventListener('load', function () {
-    var go = function () { window.loadHanzi('idle').catch(function () {}); };
+    var go = function () { window.loadHanzi('idle', window.SX_GRADE || 1).catch(function () {}); };
     ('requestIdleCallback' in window) ? requestIdleCallback(go, { timeout: 2500 }) : setTimeout(go, 1200);
   });
   </script>
