@@ -87,7 +87,45 @@
     '8|english|上': 'Unit 1 Encyclopaedias|Unit 2 Numbers|Unit 3 Computers|Unit 4 Inventions|Unit 5 Educational exchanges|Unit 6 Ancient stories|Unit 7 Memory|Unit 8 English Week',
     '8|english|下': 'Module 1 Social communication · Unit 1 Helping those in need|Unit 2 Body language|Module 2 Arts and crafts · Unit 3 Traditional skills|Unit 4 Cartoons and comic strips|Module 3 Animals · Unit 5 Save the endangered animals|Unit 6 Pets|Module 4 Discovery · Unit 7 The unknown world|Unit 8 Life in the future',
     '9|english|上': 'Unit 1 Wise men in history|Unit 2 Great minds|Unit 3 Family life|Unit 4 Problems and advice|Unit 5 Action!|Unit 6 Healthy diet|Unit 7 The Adventures of Tom Sawyer|Unit 8 Surprise endings',
-    '9|english|下': 'Module 1 Explorations and exchanges · Unit 1 Great explorations|Unit 2 Culture shock|Module 2 Environmental problems · Unit 3 The environment|Unit 4 Natural disasters|Module 3 Sport and health · Unit 5 Sport|Unit 6 Caring for your health'
+    '9|english|下': 'Module 1 Explorations and exchanges · Unit 1 Great explorations|Unit 2 Culture shock|Module 2 Environmental problems · Unit 3 The environment|Unit 4 Natural disasters|Module 3 Sport and health · Unit 5 Sport|Unit 6 Caring for your health',
+
+    /* ===== 物理 · 人教版（初中 8—9 年级，广州初中通用） ===== */
+    '8|physics|上': '第一章 机械运动|第二章 声现象|第三章 物态变化|第四章 光现象|第五章 透镜及其应用|第六章 质量与密度',
+    '8|physics|下': '第七章 力|第八章 运动和力|第九章 压强|第十章 浮力|第十一章 功和机械能|第十二章 简单机械',
+    '9|physics|上': '第十三章 内能|第十四章 内能的利用|第十五章 电流和电路|第十六章 电压 电阻|第十七章 欧姆定律|第十八章 电功率',
+    '9|physics|下': '第十九章 生活用电|第二十章 电与磁|第二十一章 信息的传递|第二十二章 能源与可持续发展|中考专题：力学综合|中考专题：电学综合',
+
+    /* ===== 化学 · 人教版（初中 9 年级） ===== */
+    '9|chemistry|上': '第一单元 走进化学世界|第二单元 我们周围的空气|第三单元 物质构成的奥秘|第四单元 自然界的水|第五单元 化学方程式|第六单元 碳和碳的氧化物|第七单元 燃料及其利用',
+    '9|chemistry|下': '第八单元 金属和金属材料|第九单元 溶液|第十单元 酸和碱|第十一单元 盐 化肥|第十二单元 化学与生活|中考专题：物质构成|中考专题：酸碱盐',
+
+    /* ===== 生物 · 人教版（初中 7—8 年级） ===== */
+    '7|biology|上': '第一单元 生物和生物圈·第一章 认识生物|第二章 了解生物圈|第二单元 生物体的结构层次·第一章 细胞是生命活动的基本单位|第二章 细胞怎样构成生物体|第三单元 生物圈中的绿色植物·第一章 藻类与苔藓植物|第二章 被子植物的一生|第三章 绿色植物与生物圈的水循环|第四章 绿色植物是有机物的制造者|第五章 绿色植物与碳氧平衡|第六章 爱护植被 绿化祖国',
+    '7|biology|下': '第四单元 生物圈中的人·第一章 人的由来|第二章 人体的营养|第三章 人体的呼吸|第四章 人体内物质的运输|第五章 人体内废物的排出|第六章 人体生命活动的调节|第七章 人类活动对生物圈的影响',
+    '8|biology|上': '第五单元 生物圈中的其他生物·第一章 动物的主要类群|第二章 动物的运动和行为|第三章 动物在生物圈中的作用|第四章 细菌和真菌|第五章 病毒|第六单元 生物的多样性及其保护·第一章 根据生物的特征进行分类|第二章 认识生物的多样性|第三章 保护生物的多样性',
+    '8|biology|下': '第七单元 生物圈中生命的延续和发展·第一章 生物的生殖和发育|第二章 生物的遗传和变异|第三章 生物的进化|第八单元 健康的生活·第一章 传染病和免疫|第二章 用药与急救|第三章 了解自己 增进健康',
+
+    /* ===== 道德与法治 · 统编版（初中 7—9 年级） ===== */
+    '7|politics|上': '第一单元 少年有梦|第二单元 友谊的天空|第三单元 师长情谊|第四单元 生命的思考',
+    '7|politics|下': '第一单元 青春时光|第二单元 做情绪情感的主人|第三单元 在集体中成长|第四单元 走进法治天地',
+    '8|politics|上': '第一单元 走进社会生活|第二单元 遵守社会规则|第三单元 勇担社会责任|第四单元 维护国家利益',
+    '8|politics|下': '第一单元 坚持宪法至上|第二单元 理解权利义务|第三单元 人民当家作主|第四单元 崇尚法治精神',
+    '9|politics|上': '第一单元 富强与创新|第二单元 民主与法治|第三单元 文明与家园|第四单元 和谐与梦想',
+    '9|politics|下': '第一单元 我们共同的世界|第二单元 世界舞台上的中国|第三单元 走向未来的少年',
+
+    /* ===== 历史 · 统编版（初中 7—9 年级） ===== */
+    '7|history|上': '第一单元 史前时期：原始社会与中华文明的起源|第二单元 夏商周时期：奴隶制王朝的更替和向封建社会的过渡|第三单元 秦汉时期：统一多民族封建国家的建立和巩固|第四单元 三国两晋南北朝时期：政权分立与民族交融',
+    '7|history|下': '第一单元 隋唐时期：繁荣与开放的时代|第二单元 辽宋夏金元时期：民族关系发展和社会变化|第三单元 明清时期：统一多民族国家的巩固与发展',
+    '8|history|上': '第一单元 中国开始沦为半殖民地半封建社会|第二单元 近代化的早期探索与民族危机的加剧|第三单元 资产阶级民主革命与中华民国的建立|第四单元 新民主主义革命的开始|第五单元 从国共合作到国共对立|第六单元 中华民族的抗日战争|第七单元 人民解放战争|第八单元 近代经济、社会生活与教育文化事业的发展',
+    '8|history|下': '第一单元 中华人民共和国的成立和巩固|第二单元 社会主义制度的建立与社会主义建设的探索|第三单元 中国特色社会主义道路|第四单元 民族团结与祖国统一|第五单元 国防建设与外交成就|第六单元 科技文化与社会生活',
+    '9|history|上': '第一单元 古代亚非文明|第二单元 古代欧洲文明|第三单元 封建时代的欧洲|第四单元 封建时代的亚洲国家|第五单元 走向近代|第六单元 资本主义制度的初步确立|第七单元 工业革命和国际共产主义运动的兴起',
+    '9|history|下': '第一单元 殖民地人民的反抗与资本主义制度的扩展|第二单元 第二次工业革命和近代科学文化|第三单元 第一次世界大战和战后初期的世界|第四单元 经济大危机和第二次世界大战|第五单元 二战后的世界变化|第六单元 走向和平发展的世界',
+
+    /* ===== 地理 · 人教版（初中 7—8 年级） ===== */
+    '7|geography|上': '第一章 地球和地图·第一节 地球和地球仪|第一章 第二节 地球的运动|第一章 第三节 地图的阅读|第一章 第四节 地形图的判读|第二章 陆地和海洋·第一节 大洲和大洋|第二章 第二节 海陆的变迁|第三章 天气与气候·第一节 多变的天气|第三章 第二节 气温的变化与分布|第三章 第三节 降水的变化与分布|第三章 第四节 世界的气候|第四章 居民与聚落|第五章 发展与合作',
+    '7|geography|下': '第六章 我们生活的大洲——亚洲|第七章 我们邻近的地区和国家·日本|第七章 东南亚|第七章 印度|第七章 俄罗斯|第八章 东半球其他的地区和国家·中东|第八章 欧洲西部|第八章 撒哈拉以南非洲|第八章 澳大利亚|第九章 西半球的国家·美国|第九章 巴西|第十章 极地地区',
+    '8|geography|上': '第一章 从世界看中国·第一节 疆域|第一章 第二节 人口|第一章 第三节 民族|第二章 中国的自然环境·第一节 地形和地势|第二章 第二节 气候|第二章 第三节 河流|第二章 第四节 自然灾害|第三章 中国的自然资源·第一节 自然资源的基本特征|第三章 第二节 土地资源|第三章 第三节 水资源|第四章 中国的经济发展·第一节 交通运输|第四章 第二节 农业|第四章 第三节 工业',
+    '8|geography|下': '第五章 中国的地理差异|第六章 北方地区·第一节 自然特征与农业|第六章 第二节 东北三省|第六章 第三节 世界最大的黄土堆积区——黄土高原|第六章 第四节 祖国的首都——北京|第七章 南方地区·第一节 自然特征与农业|第七章 第二节 长江三角洲地区|第七章 第三节 香港和澳门|第七章 第四节 祖国的神圣领土——台湾省|第八章 西北地区·第一节 自然特征与农业|第八章 第二节 干旱的宝地——塔里木盆地|第九章 青藏地区·第一节 自然特征与农业|第九章 第二节 高原湿地——三江源地区|第十章 中国在世界中'
   };
 
   /* ---------- 学段骨架 ----------
@@ -97,7 +135,9 @@
   var stages = [
     { id: 'primary', label: '小学', short: '小', grades: [1, 2, 3, 4, 5, 6], ready: [1, 2, 3, 4, 5, 6], planned: [] },
     { id: 'junior', label: '初中', short: '初', grades: [7, 8, 9], ready: [7, 8, 9], planned: [],
-      textbooks: { chinese: '统编版', math: '人教版', english: '沪教版·牛津英语（广州）' },
+      textbooks: { chinese: '统编版', math: '人教版', english: '沪教版·牛津英语（广州）',
+        physics: '人教版', chemistry: '人教版', biology: '人教版',
+        politics: '统编版', history: '统编版', geography: '人教版' },
       extraSubjects: ['物理', '化学', '生物', '道德与法治', '历史', '地理'] },
     { id: 'senior', label: '高中', short: '高', grades: [10, 11, 12], ready: [], planned: [10, 11, 12],
       textbooks: { chinese: '统编版', math: '人教版', english: '人教版' },
@@ -113,7 +153,27 @@
       wordLabel: '核心概念', readLabel: '例题讲解' },
     { id: 'english', label: '英语', icon: 'globe', color: '#0f9d8c', soft: '#e9f8f5',
       textbook: '教科版（广州版）· 三年级起点', from: 3,
-      wordLabel: '单元词汇', readLabel: '对话跟读' }
+      wordLabel: '单元词汇', readLabel: '对话跟读' },
+
+    /* ===== 初中新增学科：from / to 控制哪些年级可见 ===== */
+    { id: 'physics', label: '物理', icon: 'atom', color: '#6f4bd8', soft: '#f2edff',
+      textbook: '人教版', from: 8, to: 9,
+      wordLabel: '核心概念', readLabel: '概念跟读' },
+    { id: 'chemistry', label: '化学', icon: 'flask', color: '#1a8f70', soft: '#e8f7f1',
+      textbook: '人教版', from: 9, to: 9,
+      wordLabel: '核心概念', readLabel: '概念跟读' },
+    { id: 'biology', label: '生物', icon: 'leaf', color: '#4a9c33', soft: '#edf7e8',
+      textbook: '人教版', from: 7, to: 8,
+      wordLabel: '核心概念', readLabel: '概念跟读' },
+    { id: 'politics', label: '道德与法治', icon: 'scale', color: '#c2601f', soft: '#fdf1e5',
+      textbook: '统编版', from: 7, to: 9,
+      wordLabel: '关键词', readLabel: '观点跟读' },
+    { id: 'history', label: '历史', icon: 'landmark', color: '#8a5a3b', soft: '#f7efe8',
+      textbook: '统编版', from: 7, to: 9,
+      wordLabel: '历史名词', readLabel: '史实跟读' },
+    { id: 'geography', label: '地理', icon: 'mountain', color: '#2a7f9e', soft: '#e7f4f8',
+      textbook: '人教版', from: 7, to: 8,
+      wordLabel: '地理术语', readLabel: '地图跟读' }
   ];
 
   /* ---------- 学习模块 ----------
@@ -134,15 +194,21 @@
   var moduleSets = {
     chinese: ['preview', 'strokes', 'review', 'read', 'text', 'challenge'],
     math: ['preview', 'review', 'read', 'drill', 'challenge'],
-    english: ['preview', 'review', 'read', 'text', 'challenge']
+    english: ['preview', 'review', 'read', 'text', 'challenge'],
+    physics: ['preview', 'review', 'read', 'challenge'],
+    chemistry: ['preview', 'review', 'read', 'challenge'],
+    biology: ['preview', 'review', 'read', 'challenge'],
+    politics: ['preview', 'review', 'read', 'challenge'],
+    history: ['preview', 'review', 'read', 'challenge'],
+    geography: ['preview', 'review', 'read', 'challenge']
   };
 
   var extensionGuide = [
     { step: '1', title: '新增一个年级（如初中七年级）', body: '打开 js/config.js，把年级号从对应学段的 planned 移入 ready；在 catalog 中按 \u201c7|chinese|上\u201d 等键补上该册目录，一行一个单元，用竖线分隔。小学 1—6 年级目录已全部补齐并启用。' },
     { step: '2', title: '把某一课升级为精编内容', body: '课本目录里的每一课都能直接打开学习：46 个精编单元在 js/data-core.js（语文、数学）与 js/data-english.js（英语）；其余课次由 js/data-basic.js 按目录标题自动生成「通用教学示范内容」（预习目标、字词、练习题、跟读短文、分层作业），点开六大模块都有内容。若要为某一课换成精编内容，只需按同样的键新增一条单元数据，精编内容会自动优先，无需改动任何业务代码。' },
     { step: '3', title: '补充新模块的内容', body: '语文「生字笔顺」读取该单元 words 中的单字；165 个精编生字的笔顺在 js/stroke-data.js，602 个课本目录标题汉字的笔顺、拼音、组词在 js/hanzi-extra.js，字形信息在 js/hanzi-meta.js。「课文原文」与英语示范对话放在 js/data-text.js、js/data-text-init.js；数学「口算闯关」题型在 js/math-drill.js。模块标签由 moduleSets 自动编排。' },
-    { step: '4', title: '扩展到高中', body: '小学 1—6 年级、初中 7—9 年级已全部启用（语文统编版 / 数学人教版 / 英语小学教科版广州·初中沪教牛津版广州）。高中（10—12 年级）的年级槽位与教材版本已在 stages 中预留，并预置了物理、化学、生物等学科名。按第 1、2 步操作即可；如需新增学科，在 subjects 中追加一个对象，并在 moduleSets 中给出模块顺序，四大基础模块会自动套用。' },
-    { step: '5', title: '更换教材版本或修订目录', body: '只需修改 catalog 中对应的目录字符串与 subjects 中的 textbook 字段。2024 年起义务教育教材逐年修订，广州英语三、四年级已启用新版 Unit 制目录，请以孩子学校实际发放的课本为准核对。' },
+    { step: '4', title: '扩展到高中', body: '小学 1—6 年级、初中 7—9 年级已全部启用：语文统编版 / 数学人教版 / 英语小学教科版广州·初中沪教牛津版广州，并新增物理（人教版，八、九年级）、化学（人教版，九年级）、生物（人教版，七、八年级）、道德与法治（统编版）、历史（统编版）、地理（人教版，七、八年级）。高中（10—12 年级）的年级槽位与教材版本已在 stages 中预留，按第 1、2 步操作即可扩展。' },
+    { step: '5', title: '更换教材版本或修订目录', body: '只需修改 catalog 中对应的目录字符串与 subjects / stages.textbooks 中的教材字段。2024 年起义务教育教材逐年修订，请以孩子学校实际发放的课本为准核对；新增学科的内容词库在 js/data-subjects.js 中按章节关键字匹配，修改词库即可更新概念与跟读内容。' },
     { step: '6', title: '语音、原文与数据说明', body: '发音使用浏览器内置语音合成（Web Speech API），无需联网、无需 API Key、零费用；中文 zh-CN，英文 en-US，可在顶部设置中调速与切换音色。笔顺动画库与汉字数据全部本地内置。教材现代课文与英语课本对话未收录，可用「录入课本原文」按实际课本自行录入，内容只存本机。学习进度同样保存在本机浏览器，不上传任何数据。' }
   ];
 
@@ -150,7 +216,7 @@
     appName: '穗学伴',
     appSubTitle: '广州中小学同步学习资料',
     region: '广州市',
-    version: '1.5.0',
+    version: '1.6.0',
     storageKey: 'suixueban_progress_v1',
     textStorageKey: 'suixueban_texts_v1',
     volumes: ['上', '下'],
@@ -162,7 +228,7 @@
     extensionGuide: extensionGuide,
     speech: { rate: 0.85, pitch: 1.0, gap: 480, zh: 'zh-CN', en: 'en-US' },
     passLine: 80,
-    notice: '教材目录依据公开版本整理。46 个精编单元为教学设计示范内容；其余课次由 js/data-basic.js 按目录标题自动生成「通用教学示范内容」（字词、跟读短文、练习题），均非教材原文。语文仅收录公有领域古诗文，英语对话为原创示范；教材现代课文与课本对话请用「录入课本原文」按实际课本自行录入。笔顺、拼音、组词、部首供识字参考，请以学校课本校对后使用。',
+    notice: '教材目录依据公开版本整理。46 个精编单元为教学设计示范内容；其余课次由 js/data-basic.js 按目录标题自动生成「通用教学示范内容」（字词、跟读短文、练习题），初中六个新学科的概念词与跟读句取自 js/data-subjects.js 分科词库，均非教材原文。语文仅收录公有领域古诗文，英语对话为原创示范；教材现代课文与课本对话请用「录入课本原文」按实际课本自行录入。笔顺、拼音、组词、部首供识字参考，请以学校课本校对后使用。',
     gradeLabel: function (g) {
       if (g <= 6) return CN[g] + '年级';
       if (g <= 9) return ['七', '八', '九'][g - 7] + '年级（初' + CN[g - 6] + '）';
@@ -176,6 +242,18 @@
     subjectById: function (id) {
       for (var i = 0; i < subjects.length; i++) if (subjects[i].id === id) return subjects[i];
       return null;
+    },
+    /** 某年级实际开设的学科（物理八年级起、化学九年级、生物地理七八年级） */
+    subjectsForGrade: function (g) {
+      return subjects.filter(function (s) {
+        return (!s.from || g >= s.from) && (!s.to || g <= s.to);
+      });
+    },
+    /** 年级切换后当前学科若不开设，返回该年级默认学科 */
+    fallbackSubject: function (g, id) {
+      var list = this.subjectsForGrade(g), i;
+      for (i = 0; i < list.length; i++) if (list[i].id === id) return id;
+      return list.length ? list[0].id : 'chinese';
     },
     /* 按学段取教材名：小学用 subjects.textbook，初/高中用 stages.textbooks */
     textbookFor: function (g, subjectId) {

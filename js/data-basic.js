@@ -20,6 +20,7 @@
   var PY = window.HANZI_PINYIN || {};
   var WD = window.HANZI_WORDS || {};
   var META = window.HANZI_META || {};
+  var EX = window.SubjectBank || null;   /* 初中六大学科分科词库 */
   var cache = {};
 
   /* ---------------- 小工具 ---------------- */
@@ -420,6 +421,19 @@
         '提升：把错题重做一遍，并写出错在哪一步|' +
         '拓展：自己编 2 道同类题，考一考家人'].join('');
       u.tip = '示范内容：概念讲解与算式题为按年级自动生成的通用练习，不是教材原题；口算闯关可反复出题。';
+    } else if (EX && EX.has(s)) {
+      /* ===== 初中新增学科：物理 / 化学 / 生物 / 道法 / 历史 / 地理 ===== */
+      var prof = EX.profile(s) || {};
+      var ew2 = EX.words(s, title, seed);
+      u.words = ew2.join(';');
+      u.lines = EX.lines(s, title, seed, ew2).join(';');
+      u.quiz = EX.quiz(s, title, seed, ew2, ew2).join(';');
+      u.goals = prof.goals || '理解本课核心概念|能说出关键点|会联系实际说明问题';
+      u.steps = prof.steps || '5 分钟：读标题，想一个相关现象|8 分钟：点读概念卡并跟读|8 分钟：整理一个例子|3 分钟：讲给家人听';
+      u.ask = prof.ask || '这个概念可以怎样解释？|生活中有哪些相关例子？';
+      u.points = prof.points || '先理解概念，再记住术语|把知识和实例联系起来|答题时说清理由';
+      u.hw = prof.hw || '基础：概念各读 3 遍|提升：整理一个例子|拓展：写一段自己的理解';
+      u.tip = prof.tip || '示范内容：按章节整理的通用学习材料，非教材原文；请以学校课本为准。';
     } else {
       var ew = englishWords(title, seed);
       var dia = pick(EN_DIALOGUES, seed);

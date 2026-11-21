@@ -46,7 +46,13 @@
     eye: '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>',
     heart: '<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21l7.7-7.6 1.1-1a5.5 5.5 0 0 0 0-7.8z"/>',
     list: '<line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>',
-    zap: '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>'
+    zap: '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+    atom: '<circle cx="12" cy="12" r="2"/><ellipse cx="12" cy="12" rx="10" ry="4"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)"/>',
+    flask: '<path d="M9 2h6M10 2v6L4 19a2 2 0 0 0 1.8 3h12.4a2 2 0 0 0 1.8-3L14 8V2"/><path d="M7 15h10"/>',
+    leaf: '<path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 20 2c-1 6-3.5 14-9 16a7 7 0 0 1-4-1"/><path d="M2 21c0-6 3-10 8-12"/>',
+    scale: '<path d="M12 3v18M5 21h14M3 7h18M6 7l-3 6h6zM18 7l-3 6h6z"/>',
+    landmark: '<path d="M3 9l9-6 9 6M4 9h16M6 9v10M10 9v10M14 9v10M18 9v10M3 21h18"/>',
+    mountain: '<path d="M2 20l7-12 4 6 2-3 7 9z"/><path d="M6.5 12h5"/>'
   };
   function ic(n, cls) {
     return '<svg class="ic ' + (cls || '') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (P[n] || P.info) + '</svg>';
@@ -314,7 +320,8 @@
 
     /* 学科 */
     h += '<div class="side-label">学科</div><div class="subject-list">';
-    C.subjects.forEach(function (s) {
+    var available = C.subjectsForGrade(S.grade);
+    available.forEach(function (s) {
       var on = s.id === S.subject;
       var note = (s.id === 'english' && S.grade < 3) ? '口语启蒙' : '';
       h += '<button class="subject-btn ' + (on ? 'on' : '') + '" data-act="subject" data-v="' + s.id + '" style="--sc:' + s.color + ';--ss:' + s.soft + '">' +
@@ -499,7 +506,7 @@
     var subs = st.extraSubjects || [];
     var h = '<div class="locked"><div class="locked-ic">' + ic('lock') + '</div>' +
       '<h1>' + esc(C.gradeLabel(S.grade)) + ' · 内容建设中</h1>' +
-      '<p>该年级的年级槽位、教材版本与学科结构已经预留完成，当前版本先交付小学 1—4 年级内容。</p>' +
+      '<p>该学段的年级槽位、教材版本与学科结构已经预留完成，当前版本已覆盖小学 1—6 年级与初中 7—9 年级全部学科，高中内容待建设。</p>' +
       '<div class="locked-box"><h3>' + ic('layers') + ' 已为该学段预留</h3>' +
       '<div class="locked-row"><span>学段</span><b>' + esc(st.label) + '</b></div>' +
       '<div class="locked-row"><span>年级</span><b>' + st.grades.map(function (g) { return C.gradeShort(g); }).join(' · ') + '</b></div>' +
@@ -1167,20 +1174,21 @@
     });
     h += '</div>';
     h += '<div class="guide-files"><b>文件结构</b><pre>' +
-      esc('index.html                     页面骨架\ncss/style.css                 界面样式\njs/config.js                  ★ 学段 / 学科 / 教材目录 / 模块编排\njs/data-core.js               ★ 语文、数学单元数据\njs/data-english.js            ★ 英语单元数据\njs/data-text.js               ★ 语文古诗文原文 / 英语示范对话\njs/stroke-data.js             离线笔顺路径（165 个生字）\njs/hanzi-meta.js              笔画数 / 笔顺名称 / 部首 / 结构\njs/strokes.js                 笔顺渲染引擎（田字格 / 分解图 / 描红）\njs/math-drill.js              口算出题器与口诀公式卡\njs/speech.js                  语音引擎（Web Speech API）\nvendor/hanzi-writer.min.js    笔顺动画库（本地内置）\njs/app.js                     渲染与交互（无需为扩展修改）') +
+      esc('index.html                     页面骨架\ncss/style.css                 界面样式\njs/config.js                  ★ 学段 / 学科 / 教材目录 / 模块编排\njs/data-core.js               ★ 语文、数学单元数据\njs/data-english.js            ★ 英语单元数据\njs/data-text.js               ★ 语文古诗文原文 / 英语示范对话\njs/data-subjects.js           ★ 初中六大学科分科词库\njs/stroke-data.js             离线笔顺路径（165 个生字）\njs/hanzi-meta.js              笔画数 / 笔顺名称 / 部首 / 结构\njs/strokes.js                 笔顺渲染引擎（田字格 / 分解图 / 描红）\njs/math-drill.js              口算出题器与口诀公式卡\njs/speech.js                  语音引擎（Web Speech API）\nvendor/hanzi-writer.min.js    笔顺动画库（本地内置）\njs/app.js                     渲染与交互（无需为扩展修改）') +
       '</pre></div>';
     h += '<div class="guide-schema"><b>一条单元数据的最小结构</b><pre>' +
       esc("addUnit('5|chinese|上', 0, {\n  title:  '单元标题',\n  goals:  '目标1|目标2|目标3',\n  words:  '字|拼音|组词;字|拼音|组词',\n  ask:    '思考问题1|思考问题2',\n  steps:  '步骤1|步骤2',\n  points: '要点1|要点2',\n  quiz:   '题干|A,B,C|正确序号|解析',\n  lines:  '句段|注音|提示',\n  hw:     '基础作业|提升作业|拓展作业',\n  tip:    '跟读提示'\n});") + '</pre></div>';
-    openModal('扩展指南 · 从 1—4 年级到 5—6 年级与初高中', h, true);
+    openModal('扩展指南 · 年级与学科扩展说明', h, true);
   }
 
   function openAbout() {
     var h = '<div class="about-box"><h3>适用对象与教材版本</h3><table class="about-table"><tr><th>学科</th><th>教材版本</th><th>起始年级</th></tr>';
     C.subjects.forEach(function (s) {
-      h += '<tr><td>' + esc(s.label) + '</td><td>' + esc(s.textbook) + '</td><td>' + (s.from === 1 ? '一年级' : '三年级') + '起</td></tr>';
+      var range = (!s.to || s.to === s.from) ? esc(C.gradeLabel(s.from)) + '起' : esc(C.gradeShort(s.from)) + '—' + esc(C.gradeShort(s.to));
+      h += '<tr><td>' + esc(s.label) + '</td><td>' + esc(C.textbookFor(s.from, s.id)) + '</td><td>' + range + '</td></tr>';
     });
-    h += '</table><p>依据广州市公开教材目录整理：语文为统编版，数学为人教版，英语为教科版（广州版，三年级起点）。' +
-      '2024 年起义务教育教材逐年修订，三、四年级英语已启用新版 Unit 制目录，各区、各校进度可能不同，请以孩子学校实际发放的课本为准。</p></div>';
+    h += '</table><p>依据广州市公开教材目录整理：语文统编版，数学人教版，英语小学为教科版（广州版，三年级起点）、初中为沪教版牛津英语（广州）；初中新增物理、化学、生物、道德与法治、历史、地理，按各学科实际开设年级显示。' +
+      '2024 年起义务教育教材逐年修订，请以孩子学校实际发放的课本为准核对。</p></div>';
     h += '<div class="about-box"><h3>内容边界（请教师／家长留意）</h3><ul>' +
       '<li>课本目录按教材整理，用于对照定位；<b>配套字词、例句、讲解与习题为教学设计示范内容，不是教材原文</b>。</li>' +
       '<li>「课文原文」页的语文内容为<b>公有领域古诗文</b>（唐宋清诗作与先秦典籍），可全文跟读；教材中的现代课文受著作权保护，本资料未收录。</li>' +
@@ -1189,6 +1197,7 @@
       '<li>「生字笔顺」的笔画路径来自开源汉字数据，笔画名称按横／竖／撇／点捺／折五类归并，部首与结构供识字参考，细分笔画与部首归属请以课本为准。</li>' +
       '<li>一年级、二年级英语为口语启蒙拓展，广州小学英语国家课程自三年级起开设。</li>' +
       '<li>未填充内容的单元会显示「通用学习框架」，可直接使用，也可按格式补充细节。</li>' +
+      '<li>初中六大学科的概念词、跟读句与题目按章节关键字从 js/data-subjects.js 词库生成，均为教学设计示范内容，不是教材原文。</li>' +
       '</ul></div>';
     h += '<div class="about-box"><h3>语音、笔顺与隐私</h3><p>' + esc(C.extensionGuide[C.extensionGuide.length - 1].body) + '</p></div>';
     h += '<div class="about-box"><h3>使用建议</h3><p>一次学习建议按「课前预习 → 课后复习 → 课本跟读 → 通关挑战」的顺序走完一个单元，约 20—25 分钟。' +
@@ -1279,11 +1288,17 @@
       case 'stage': {
         var st = null;
         C.stages.forEach(function (x) { if (x.id === v) st = x; });
-        if (st) { S.grade = st.grades[0]; S.unitIndex = firstReadyUnit(); resetUnitState(); renderAll(); }
+        if (st) {
+          S.grade = st.grades[0];
+          S.subject = C.fallbackSubject(S.grade, S.subject);
+          S.unitIndex = firstReadyUnit(); resetUnitState(); renderAll();
+        }
         break;
       }
       case 'grade':
-        S.grade = +v; S.unitIndex = firstReadyUnit(); resetUnitState(); renderAll(); break;
+        S.grade = +v;
+        S.subject = C.fallbackSubject(S.grade, S.subject);
+        S.unitIndex = firstReadyUnit(); resetUnitState(); renderAll(); break;
       case 'subject':
         S.subject = v; S.unitIndex = firstReadyUnit(); S.module = 'preview'; resetUnitState(); markVisited('preview'); renderAll(); break;
       case 'volume':
