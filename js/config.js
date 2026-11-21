@@ -122,7 +122,7 @@
     appName: '穗学伴',
     appSubTitle: '广州小学同步学习资料',
     region: '广州市',
-    version: '1.3.1',
+    version: '1.4.0',
     storageKey: 'suixueban_progress_v1',
     textStorageKey: 'suixueban_texts_v1',
     volumes: ['上', '下'],
