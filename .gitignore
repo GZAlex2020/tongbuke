@@ -1,0 +1,9 @@
+# 历史单文件快照不再入库；发布走 git tag / GitHub Release，构建产物见 dist/
+穗学伴-v*.html
+/穗学伴.html
+
+# 本地验证临时文件
+test-*.html
+
+# Cloudflare 工具依赖（服务端脚本见 cloudflare/ 目录）
+cloudflare/node_modules/
