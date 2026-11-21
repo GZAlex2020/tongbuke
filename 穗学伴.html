@@ -3,13 +3,13 @@
   穗学伴 · 自包含离线版（构建产物）
   CSS 与全部 JS 已内联，零外部请求，不受浏览器脚本缓存影响。
   源文件在 css/ 与 js/ 下；修改后运行 node build.js 重新生成。
-  构建时间：2026-11-21T00:53:45.906Z
+  构建时间：2026-11-21T03:03:24.049Z
 -->
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- 版本号 v=1.4.0：每次改动资源后递增，避免浏览器把新旧脚本混用导致模块错乱 -->
+  <!-- 版本号 v=1.4.1：每次改动资源后递增，避免浏览器把新旧脚本混用导致模块错乱 -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
@@ -170,6 +170,12 @@ code { background: #eef2f8; padding: 1px 5px; border-radius: 5px; font-size: 12p
 }
 .foot-btn:hover { background: #f2f5fa; color: var(--primary); }
 .foot-btn .ic { width: 15px; height: 15px; }
+/* 口算快练入口：橙色主题，与工具本身呼应 */
+.foot-btn.drill-entry, .foot-btn.drill-foot {
+  color: #d9621b; background: #fff3e9; font-weight: 700;
+  border: 1px solid #ffe0c7;
+}
+.foot-btn.drill-entry:hover, .foot-btn.drill-foot:hover { background: #ffe8d6; color: #c4530f; }
 
 /* ---------------- 顶栏 ---------------- */
 .crumb { display: flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--muted); }
@@ -183,6 +189,12 @@ code { background: #eef2f8; padding: 1px 5px; border-radius: 5px; font-size: 12p
 }
 .top-btn:hover { background: var(--primary-soft); color: var(--primary); }
 .top-btn .ic { width: 15px; height: 15px; }
+.top-btn.drill-entry {
+  background: linear-gradient(135deg, #ff9a52, #f57c25); color: #fff;
+  box-shadow: 0 2px 8px rgba(245,124,37,.28);
+}
+.top-btn.drill-entry:hover { background: linear-gradient(135deg, #ffab6b, #e86e1c); color: #fff; }
+.top-btn.drill-entry .ic { width: 16px; height: 16px; fill: currentColor; }
 .warn-pill {
   display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: #a1620a;
   background: #fff7e8; border: 1px solid #f5dfae; padding: 6px 10px; border-radius: 8px;
@@ -866,7 +878,7 @@ code { background: #eef2f8; padding: 1px 5px; border-radius: 5px; font-size: 12p
     appName: '穗学伴',
     appSubTitle: '广州小学同步学习资料',
     region: '广州市',
-    version: '1.4.0',
+    version: '1.4.1',
     storageKey: 'suixueban_progress_v1',
     textStorageKey: 'suixueban_texts_v1',
     volumes: ['上', '下'],
@@ -3508,7 +3520,8 @@ var HanziWriter=function(){"use strict";var t;const e="undefined"==typeof window
     print: '<polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>',
     eye: '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>',
     heart: '<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21l7.7-7.6 1.1-1a5.5 5.5 0 0 0 0-7.8z"/>',
-    list: '<line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>'
+    list: '<line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>',
+    zap: '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>'
   };
   function ic(n, cls) {
     return '<svg class="ic ' + (cls || '') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (P[n] || P.info) + '</svg>';
@@ -3814,6 +3827,7 @@ var HanziWriter=function(){"use strict";var t;const e="undefined"==typeof window
     h += '</div>';
 
     h += '<div class="side-foot">' +
+      '<button class="foot-btn drill-foot" data-act="open-drill">' + ic('zap') + '口算快练 · 7天速算技巧训练</button>' +
       '<button class="foot-btn" data-act="guide">' + ic('layers') + '扩展指南：新增年级 / 初高中</button>' +
       '<button class="foot-btn" data-act="about">' + ic('info') + '教材版本与使用说明</button>' +
       '</div>';
@@ -3838,6 +3852,7 @@ var HanziWriter=function(){"use strict";var t;const e="undefined"==typeof window
       '<span>' + esc(S.volume) + '册</span></div>';
     h += '<div class="top-actions">' +
       (SP.supported ? '' : '<span class="warn-pill">' + ic('info') + '当前浏览器不支持语音，请用 Edge / Chrome</span>') +
+      '<button class="top-btn drill-entry" data-act="open-drill" title="打开口算快练（7天速算技巧训练）">' + ic('zap') + '<span>口算快练</span></button>' +
       '<button class="top-btn" data-act="settings" title="语音设置">' + ic('settings') + '<span>语音设置</span></button>' +
       '<button class="top-btn" data-act="print" title="打印本页">' + ic('print') + '</button>' +
       '</div>';
@@ -4730,6 +4745,12 @@ var HanziWriter=function(){"use strict";var t;const e="undefined"==typeof window
     var act = el.dataset.act, v = el.dataset.v;
 
     switch (act) {
+      case 'open-drill': {
+        /* 口算快练是独立单文件工具，新标签打开，保留当前学习进度 */
+        try { window.open('口算快练.html', '_blank'); }
+        catch (e) { alert('请打开同目录下的「口算快练.html」使用口算快练。'); }
+        break;
+      }
       case 'stage': {
         var st = null;
         C.stages.forEach(function (x) { if (x.id === v) st = x; });
@@ -5147,7 +5168,7 @@ var HanziWriter=function(){"use strict";var t;const e="undefined"==typeof window
   <script>
   window.addEventListener('load', function () {
     setTimeout(function () {
-      var EXPECTED = '1.4.0';
+      var EXPECTED = '1.4.1';
       var C = window.APP_CONFIG;
       var content = document.getElementById('content');
       var tabsBox = document.querySelector('.module-tabs');

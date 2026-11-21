@@ -45,7 +45,8 @@
     print: '<polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>',
     eye: '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>',
     heart: '<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21l7.7-7.6 1.1-1a5.5 5.5 0 0 0 0-7.8z"/>',
-    list: '<line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>'
+    list: '<line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>',
+    zap: '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>'
   };
   function ic(n, cls) {
     return '<svg class="ic ' + (cls || '') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (P[n] || P.info) + '</svg>';
@@ -351,6 +352,7 @@
     h += '</div>';
 
     h += '<div class="side-foot">' +
+      '<button class="foot-btn drill-foot" data-act="open-drill">' + ic('zap') + '口算快练 · 7天速算技巧训练</button>' +
       '<button class="foot-btn" data-act="guide">' + ic('layers') + '扩展指南：新增年级 / 初高中</button>' +
       '<button class="foot-btn" data-act="about">' + ic('info') + '教材版本与使用说明</button>' +
       '</div>';
@@ -375,6 +377,7 @@
       '<span>' + esc(S.volume) + '册</span></div>';
     h += '<div class="top-actions">' +
       (SP.supported ? '' : '<span class="warn-pill">' + ic('info') + '当前浏览器不支持语音，请用 Edge / Chrome</span>') +
+      '<button class="top-btn drill-entry" data-act="open-drill" title="打开口算快练（7天速算技巧训练）">' + ic('zap') + '<span>口算快练</span></button>' +
       '<button class="top-btn" data-act="settings" title="语音设置">' + ic('settings') + '<span>语音设置</span></button>' +
       '<button class="top-btn" data-act="print" title="打印本页">' + ic('print') + '</button>' +
       '</div>';
@@ -1267,6 +1270,12 @@
     var act = el.dataset.act, v = el.dataset.v;
 
     switch (act) {
+      case 'open-drill': {
+        /* 口算快练是独立单文件工具，新标签打开，保留当前学习进度 */
+        try { window.open('口算快练.html', '_blank'); }
+        catch (e) { alert('请打开同目录下的「口算快练.html」使用口算快练。'); }
+        break;
+      }
       case 'stage': {
         var st = null;
         C.stages.forEach(function (x) { if (x.id === v) st = x; });

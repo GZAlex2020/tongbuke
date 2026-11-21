@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="theme-color" content="#FF8A3D">
+<title>快整计算 · 小学口算技巧训练</title>
+<style>
+:root{
+  --orange:#FF8A3D; --orange-d:#E9762B; --orange-l:#FFF1E6;
+  --green:#3DBE9A; --green-l:#E7F8F2;
+  --wrong:#FF6B6B; --wrong-l:#FFF0F0;
+  --warn:#FFD166; --warn-l:#FFF8E3;
+  --ink:#2F2A25; --muted:#7C7369; --faint:#ACA398;
+  --bg:#FFF9F3; --card:#FFFFFF; --line:#F1E6D9;
+  --shadow:0 8px 28px rgba(93,64,40,.07);
+  --r:20px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:"PingFang SC","HarmonyOS Sans","Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-variant-numeric:tabular-nums; line-height:1.5; min-height:100vh;
+}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:3px solid var(--orange);outline-offset:3px;border-radius:8px}
+#app{max-width:1080px;margin:0 auto;padding:20px 20px 60px}
+.num{font-variant-numeric:tabular-nums;letter-spacing:.02em}
+
+/* ---------- 通用组件 ---------- */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.pad{padding:22px}
+.row{display:flex;align-items:center;gap:12px}
+.between{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.wrap{flex-wrap:wrap}
+.col{display:flex;flex-direction:column;gap:12px}
+.muted{color:var(--muted)}
+.faint{color:var(--faint)}
+.small{font-size:14px}
+.tiny{font-size:12px}
+.big{font-size:22px;font-weight:800}
+.h1{font-size:34px;font-weight:900;letter-spacing:-.5px}
+.h2{font-size:22px;font-weight:800}
+.center{text-align:center}
+.grow{flex:1}
+.hidden{display:none!important}
+
+.btn{
+  min-height:56px;padding:0 24px;border-radius:16px;font-weight:800;font-size:17px;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  background:#F6F1EA;color:var(--ink);border:2px solid transparent;transition:transform .15s,background .15s;
+}
+.btn:hover{background:#EFE7DD}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:var(--orange);color:#fff;box-shadow:0 6px 16px rgba(255,138,61,.28)}
+.btn.primary:hover{background:var(--orange-d)}
+.btn.ghost{background:transparent;border-color:var(--line)}
+.btn.ghost:hover{background:var(--orange-l)}
+.btn.sm{min-height:44px;padding:0 16px;font-size:14px;border-radius:12px}
+.btn.block{width:100%}
+.btn.ok{background:var(--green);color:#fff}
+.btn[disabled]{opacity:.45;cursor:default;transform:none}
+
+.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;font-size:13px;font-weight:700;background:var(--orange-l);color:var(--orange-d)}
+.chip.green{background:var(--green-l);color:#21876B}
+.chip.warn{background:var(--warn-l);color:#9A6B00}
+.chip.gray{background:#F2EFEA;color:var(--muted)}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block;background:#E6DFD6}
+.dot.on{background:var(--orange)}
+
+/* ---------- 顶栏 ---------- */
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:22px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;font-weight:900;font-size:20px}
+.brand-mark{width:38px;height:38px;border-radius:12px;background:var(--orange);color:#fff;display:grid;place-items:center;font-size:19px;box-shadow:0 4px 12px rgba(255,138,61,.3)}
+.grade-sel{display:flex;gap:4px;background:#F6F1EA;padding:5px;border-radius:14px}
+.grade-sel button{min-width:44px;min-height:44px;border-radius:10px;font-weight:800;color:var(--muted)}
+.grade-sel button.on{background:#fff;color:var(--orange-d);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.linkish{font-weight:700;font-size:14px;color:var(--muted);padding:10px 12px;border-radius:10px;min-height:44px;display:inline-flex;align-items:center}
+.linkish:hover{background:var(--orange-l);color:var(--orange-d)}
+
+/* ---------- 首页 ---------- */
+.hero{background:linear-gradient(135deg,#FFF6EC 0%,#FFEAD7 100%);border-color:#FFDFC2;padding:30px}
+.hero-tag{font-size:14px;font-weight:800;color:var(--orange-d);letter-spacing:1px}
+.hero-name{font-size:clamp(36px,6vw,62px);font-weight:900;letter-spacing:-2px;margin:6px 0}
+.hero-slogan{font-size:20px;font-weight:700;color:#8A5A32;margin-bottom:18px}
+.hero-demo{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:14px 0 22px}
+.demo-blk{background:#fff;border:2px solid #FFD9B8;border-radius:12px;padding:8px 14px;font-weight:800;font-size:18px;box-shadow:0 3px 0 #FFD9B8}
+.demo-arrow{color:var(--orange-d);font-weight:900}
+.flame{font-size:26px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.sec-title{display:flex;align-items:center;justify-content:space-between;margin:28px 2px 12px}
+.trick-tile{padding:16px;text-align:left;min-height:118px;display:flex;flex-direction:column;justify-content:space-between;transition:transform .15s,border-color .15s}
+.trick-tile:hover{transform:translateY(-3px);border-color:var(--orange)}
+.trick-tile.lock{opacity:.55}
+.trick-tile .n{font-size:19px;font-weight:900}
+.mastery{display:flex;gap:4px}
+
+/* ---------- 7 天地图 ---------- */
+.map{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.day{padding:12px 6px;border-radius:14px;background:#F8F4EE;text-align:center;border:2px solid transparent;min-height:106px}
+.day.done{background:var(--green-l);border-color:#BEE9DA}
+.day.today{background:var(--orange-l);border-color:var(--orange)}
+.day.lock{opacity:.42}
+.day .stamp{font-size:28px;line-height:1.2}
+.day .d{font-size:12px;font-weight:800;color:var(--muted)}
+.day .t{font-size:12px;font-weight:700;margin-top:4px}
+
+/* ---------- 微课 ---------- */
+.steps{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:20px 0}
+.step-blk{background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px 16px;font-size:20px;font-weight:800;animation:pop .2s ease-out both}
+.step-blk.hot{border-color:var(--orange);background:var(--orange-l);color:var(--orange-d)}
+@keyframes pop{from{opacity:0;transform:translateX(10px) scale(.94)}to{opacity:1;transform:none}}
+.ex-list{padding-left:20px;line-height:2;font-size:18px;font-weight:700}
+.slogan-box{background:var(--warn-l);border:2px dashed var(--warn);border-radius:16px;padding:16px;text-align:center;font-size:24px;font-weight:900;color:#8A6100}
+
+/* ---------- 训练场 ---------- */
+.drill-shell{max-width:760px;margin:0 auto}
+.timer-wrap{display:flex;align-items:center;gap:12px}
+.timer-track{height:12px;border-radius:99px;background:#F0EAE2;overflow:hidden;width:150px}
+.timer-fill{height:100%;background:var(--green);border-radius:99px;transition:width .1s linear}
+.timer-fill.low{background:var(--warn)}
+.q-text{font-size:clamp(40px,6vw,72px);font-weight:900;letter-spacing:-1px;margin:18px 0 6px;word-break:break-word}
+.ans-input{width:100%;height:80px;border:3px solid var(--line);border-radius:18px;font-size:38px;font-weight:900;text-align:center;background:#FFFDFB}
+.ans-input:focus{border-color:var(--orange);outline:none;box-shadow:0 0 0 4px var(--orange-l)}
+.methods{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:16px 0}
+.method{min-height:60px;padding:10px 14px;border-radius:14px;border:2px solid var(--line);background:#fff;font-weight:800;font-size:16px;text-align:left;display:flex;align-items:center;gap:10px}
+.method:hover{border-color:var(--orange)}
+.method.on{border-color:var(--orange);background:var(--orange-l);color:var(--orange-d)}
+.method .rad{width:22px;height:22px;border-radius:50%;border:2px solid #D9D0C5;flex:none;display:grid;place-items:center;font-size:12px}
+.method.on .rad{background:var(--orange);border-color:var(--orange);color:#fff}
+.fb{animation:pop .25s ease-out both}
+.fb-icon{font-size:52px;font-weight:900;width:76px;height:76px;border-radius:50%;display:grid;place-items:center;flex:none}
+.fb-icon.perfect{background:var(--green-l);color:var(--green)}
+.fb-icon.lucky,.fb-icon.slip{background:var(--warn-l);color:#B78400}
+.fb-icon.miss,.fb-icon.mislabel{background:var(--orange-l);color:var(--orange-d)}
+.qdots{display:flex;gap:6px}
+.qdots i{width:9px;height:9px;border-radius:50%;background:#E6DFD6;display:block}
+.qdots i.done{background:var(--green)}
+.qdots i.now{background:var(--orange);transform:scale(1.3)}
+
+/* ---------- 弹层 ---------- */
+.overlay{position:fixed;inset:0;background:rgba(47,42,37,.45);display:grid;place-items:center;padding:20px;z-index:50;backdrop-filter:blur(3px)}
+.modal{background:#fff;border-radius:24px;padding:30px;max-width:560px;width:100%;box-shadow:0 24px 70px rgba(0,0,0,.2);animation:pop .25s ease-out both;max-height:90vh;overflow:auto}
+.flash-card{background:linear-gradient(135deg,#FFF6EC,#FFE9D6);border:2px solid #FFD9B8;border-radius:24px;padding:40px 20px;text-align:center;font-size:clamp(30px,5vw,50px);font-weight:900;animation:pop .3s ease-out both}
+.flash-progress{height:8px;border-radius:99px;background:#F0EAE2;overflow:hidden;margin:16px 0}
+
+/* ---------- 家长端 ---------- */
+.radar-wrap{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.radar-wrap svg{flex:none}
+.metric{padding:14px;border-radius:16px;background:#FAF6F0}
+.metric .v{font-size:28px;font-weight:900}
+.bar{height:10px;background:#F0EAE2;border-radius:99px;overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--orange);border-radius:99px}
+.trend{display:flex;align-items:flex-end;gap:8px;height:120px;padding-top:10px}
+.trend .tb{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;height:100%;justify-content:flex-end}
+.trend .tb .b{width:100%;max-width:36px;background:var(--green);border-radius:8px 8px 3px 3px;min-height:3px;transition:height .3s}
+.trend .tb .lb{font-size:11px;color:var(--muted)}
+.alert{background:var(--warn-l);border:1px solid #F5DFA4;border-radius:14px;padding:14px;font-size:14px;line-height:1.7}
+
+/* ---------- 打印卡 ---------- */
+#printCard{display:none}
+@media print{
+  @page{size:A4;margin:14mm}
+  body{background:#fff} #app,#overlay{display:none!important}
+  #printCard{display:block!important;color:#000;font-family:sans-serif}
+  .pc-h{font-size:22px;font-weight:800;border-bottom:2px solid #000;padding-bottom:8px}
+  .pc-meta{font-size:12px;color:#444;margin:6px 0 14px}
+  .pc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 28px;font-size:15px;line-height:1.9}
+  .pc-fold{border-top:2px dashed #000;margin:18px 0 10px;padding-top:8px;font-size:13px;font-weight:700}
+  .pc-ans{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;font-size:13px;line-height:1.8}
+}
+
+@media (max-width:820px){
+  .grid3,.grid4{grid-template-columns:repeat(2,1fr)}
+  .map{grid-template-columns:repeat(4,1fr)}
+  .methods{grid-template-columns:1fr}
+  .h1{font-size:28px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="overlay"></div>
+<div id="printCard"></div>
+
+<script>
+"use strict";
+/* ================================================================
+   0. 基础工具 / 文案（所有面向孩子的文案集中于此）
+   ================================================================ */
+const $=(s,r=document)=>r.querySelector(s);
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+const dayKey=(ts=Date.now())=>{const d=new Date(ts);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");};
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+const COPY={
+  noticeTitle:"家长告知",
+  noticeBody:"本应用数据仅存这台设备，不上传、无广告、无排行榜。请放心给孩子用。",
+  noticeBtn:"我知道了",
+  parentTitle:"家长入口", parentTip:"请家长回答：", parentWrong:"再试一次", parentBack:"先回首页",
+  homeTag:"今日一招", homeStart:"开始 10 分钟", homeFlash:"必背搭档闪卡", homeMap:"7 天闯关地图",
+  homeTricks:"技巧库", streak:"连续", days:"天", parent:"家长看板", grade:"年级",
+  learnBack:"回首页", learnTry:"我来试 3 题", learnDemo:"看一遍怎么算", learnSlogan:"记住这句",
+  learnRead:"念给我听", learnNext:"开始训练", learnLocked:"先解锁前一招哦",
+  drillCheck:"确定", drillMethod:"我用的招：", drillHard:"硬算",
+  fb:{perfect:"漂亮！一眼就看到",lucky:"算对了，但你是硬扛的～试试那招只要 3 秒",
+      mislabel:"答案对，招认错了。其实是",slip:"招选对了！最后一步算飘了",
+      miss:"没关系，看一眼怎么拆",timeout:"时间到，可以更快"},
+  explainTitle:"说说你怎么算的？", explainSkip:"选一个就行", explainFree:"也可以自己写一句…",
+  explainOk:"就这个", explainWrong:"再看一眼分步", explainRight:"说得出来，真棒",
+  reviewTitle:"这招回看一眼", reviewGo:"去看微课", reviewLater:"继续训练",
+  resultTitle:"这轮完成啦", resultAgain:"再来一轮", resultHome:"回首页", resultParent:"给家长看",
+  flashTitle:"必背整搭档", flashSkip:"跳过闪卡", mapTitle:"7 天闯关地图", mapToday:"今天",
+  exportCard:"导出 A4 练习卡", voiceOff:"语音稍后再说",
+  ok:"好", next:"下一题", tip:"提示", empty:"先去首页选一招吧"
+};
+
+/* ================================================================
+   1. 技巧库 registry —— 唯一内容源（严格照抄需求文档第四节）
+   ================================================================ */
+const TRICKS=[
+{id:"make10",name:"凑十凑百",grade:1,slogan:"见9想1，见8想2",demo:"8+7 → 8+2+5 → 10+5 → 15",examples:["8+7=15","9+6=15","36+48=84"],gen:"genMake10",timeLimit:8,trap:"拆错了数，凑完还剩错"},
+{id:"compensate",name:"搬家补偿",grade:2,slogan:"多加要还，同加减差不变",demo:"63−28 → 65−30 → 35",examples:["48+35=83","199+67=266","100−47=53"],gen:"genCompensate",timeLimit:10,trap:"加法还反方向"},
+{id:"split_mul",name:"拆数乘",grade:2,slogan:"整的先乘，零头后乘",demo:"12×5 → 10×5+2×5 → 60",examples:["12×5=60","15×6=90","24×5=120"],gen:"genSplitMul",timeLimit:10,trap:"漏乘零头那一项"},
+{id:"partner25",name:"黄金搭档",grade:3,slogan:"25配4，125配8",demo:"28×25 → 28×100÷4 → 700",examples:["25×4=100","125×8=1000","36×25=900"],gen:"genPartner25",timeLimit:8,trap:"该÷4 写成了 ×4"},
+{id:"head_tail",name:"头同尾合十",grade:4,slogan:"头乘头加一，尾乘尾跟上",demo:"43×47 → 4×5=20，3×7=21 → 2021",examples:["62×68=4216","85×85=7225","91×99=9009"],gen:"genHeadTail",timeLimit:12,trap:"尾积<10 忘了补 0"},
+{id:"mul11",name:"乘11拉中间",grade:3,slogan:"两边一拉，中间一加",demo:"23×11 → 2 (2+3) 3 → 253",examples:["45×11=495","68×11=748","135×11=1485"],gen:"genMul11",timeLimit:10,trap:"满十忘了向前进位"},
+{id:"fast_x",name:"九五九九诀",grade:3,slogan:"乘9减一次，乘5折一半",demo:"37×9 → 370−37 → 333",examples:["46×5=230","24×99=2376","360÷5=72"],gen:"genFastX",timeLimit:9,trap:"×99 只减了 1 没减本身"}
+];
+const TMAP=Object.fromEntries(TRICKS.map(t=>[t.id,t]));
+const FLASHCARDS=["25×4=100","50×2=100","125×8=1000","5×2=10","25×8=200","125×4=500"];
+const STAMPS=["🐣","🐥","🐤","⚡","🌟","🚀","👑"];
+const PHRASES={
+  highLucky:n=>`今天有 ${n} 题是硬算出来的，答案没错但没用上招。睡前问他一句："不用竖式怎么秒？" 说得出口诀就算过。`,
+  slipHeavy:()=>`招都选对了，是最后一步手滑。不用加题，明天练 3 分钟闪卡就行。`,
+  missTrick:t=>`「${t}」连错两次，概念还没通。别催速度，陪他把分步动画看一遍，让他讲给你听。`,
+  great:(t,s)=>`「${t}」稳了，平均 ${s} 秒，已经是条件反射级别。今天可以早点睡 🌙`,
+  streak:d=>`连着 ${d} 天了。比正确率更值钱的是这个数字，别断在明天。`
+};
+
+/* ================================================================
+   2. 出题引擎 —— 7 个纯函数生成器（第五节约束）
+   ================================================================ */
+function make10Steps(a,b){
+  let x=a,y=b;
+  if(y%10>x%10 && y%10!==0){x=b;y=a;}
+  let need=10-x%10; if(need===10)need=0;
+  const rest=y-need;
+  return [`${a}+${b}`,`${x}+${need}+${rest}`,`10+${rest}`,`${a+b}`];
+}
+function genMake10(level){
+  let a,b;
+  if(level===1){
+    do{a=rnd(3,9);b=rnd(3,9);}while(a+b<10||(a<7&&b<7));
+  }else if(level===2){
+    a=rnd(11,89);b=rnd(7,9);
+    if(a%10+b<10)a=a-a%10+(10-b+1);
+  }else{
+    do{a=rnd(12,89);b=rnd(12,89);}while(!((a%10>=7)||(b%10>=7)||(a%10>0&&a%10<=3)||(b%10>0&&b%10<=3)));
+  }
+  return {text:`${a}+${b}`,answer:a+b,steps:make10Steps(a,b)};
+}
+function genCompensate(level){
+  if(level===1){
+    if(Math.random()<.5){
+      const a=rnd(4,9)*10+rnd(7,9),b=rnd(11,62),d=10-a%10;
+      return {text:`${a}+${b}`,answer:a+b,steps:[`${a}+${b}`,`${a+d}+${b-d}`,`${a+b}`]};
+    }
+    const b=rnd(2,8)*10+rnd(7,9),d=10-b%10;
+    const t=rnd(Math.floor(b/10)+2,10),a=t*10+rnd(0,9-d);
+    return {text:`${a}−${b}`,answer:a-b,steps:[`${a}−${b}`,`${a+d}−${b+d}`,`${a-b}`]};
+  }
+  if(level===2){
+    const a=pick([99,199,1001]),b=rnd(11,88),d=a===1001?-1:10-a%10;
+    return {text:`${a}+${b}`,answer:a+b,steps:[`${a}+${b}`,`${a+d}+${b-d}`,`${a+b}`]};
+  }
+  const a=pick([100,200,300,500,1000]);
+  let b=rnd(11,98); if(b%10===0)b++;
+  const up=Math.ceil(b/10)*10,d=up-b;
+  return {text:`${a}−${b}`,answer:a-b,steps:[`${a}−${b}`,`${a-d}−${up}`,`${a-b}`]};
+}
+function genSplitMul(level){
+  let a,b;
+  if(level===1){a=rnd(12,19);b=rnd(2,9);}
+  else if(level===2){a=rnd(21,99);b=pick([4,5]);}
+  else{a=rnd(21,99);b=rnd(6,9);}
+  const t=Math.floor(a/10)*10,o=a%10;
+  return {text:`${a}×${b}`,answer:a*b,steps:[`${a}×${b}`,`${t}×${b}+${o}×${b}`,`${t*b}+${o*b}`,`${a*b}`]};
+}
+function genPartner25(level){
+  if(level===1){
+    const n=rnd(2,40)*4;
+    return {text:`${n}×25`,answer:n*25,steps:[`${n}×25`,`${n}×100÷4`,`${n*25}`]};
+  }
+  if(level===2){
+    if(Math.random()<.5){const n=rnd(2,125)*8;return {text:`${n}×125`,answer:n*125,steps:[`${n}×125`,`${n}×1000÷8`,`${n*125}`]};}
+    const n=rnd(2,40)*125;return {text:`${n}×8`,answer:n*8,steps:[`${n}×8`,`${n}×1000÷125`,`${n*8}`]};
+  }
+  const a=rnd(11,89),c=100-a;
+  return {text:`${a}×25+25×${c}`,answer:2500,steps:[`${a}×25+25×${c}`,`25×(${a}+${c})`,`25×100`,`2500`]};
+}
+function genHeadTail(level){
+  const t=rnd(2,9);
+  let u,v;
+  if(level===1){do{u=rnd(2,8);v=10-u;}while(u===v);}
+  else if(level===2){u=5;v=5;}
+  else{u=pick([1,9]);v=10-u;}
+  const a=t*10+u,b=t*10+v;
+  if(Math.floor(a/10)!==Math.floor(b/10)||u+v!==10)return genHeadTail(1);
+  const head=t*(t+1),tail=u*v;
+  return {text:`${a}×${b}`,answer:a*b,steps:[`${a}×${b}`,`头 ${t}×${t+1}=${head}`,`尾 ${u}×${v}=${String(tail).padStart(2,"0")}`,`${a*b}`]};
+}
+function mul11Digits(n){
+  const d=String(n).split("").map(Number),k=d.length,at=i=>(i>=0&&i<k)?d[k-1-i]:0;
+  const out=[];let carry=0;
+  for(let p=0;p<k;p++){const s=at(p-1)+at(p)+carry;out.push(s%10);carry=Math.floor(s/10);}
+  if(carry)out.push(carry);
+  return out.reverse();
+}
+function genMul11(level){
+  let n;
+  if(level===1){do{n=rnd(10,89);}while((n%10+Math.floor(n/10))>=10);}
+  else if(level===2){do{n=rnd(10,89);}while((n%10+Math.floor(n/10))<10);}
+  else{do{n=rnd(101,989);}while(Math.random()>.6&&((n%10+Math.floor(n/10)%10)<10));}
+  const d=String(n).split("").map(Number),digits=mul11Digits(n);
+  const mids=[];
+  for(let i=d.length-1;i>=1;i--)mids.push(`${d[i-1]}+${d[i]}=${d[i-1]+d[i]}`);
+  const steps=[`${n}×11`,`两边一拉，中间 ${mids.join("，")}`];
+  if(mids.some(m=>Number(m.split("=")[1])>=10))steps.push("满十，向前进位");
+  steps.push(`${n*11}`);
+  return {text:`${n}×11`,answer:n*11,steps};
+}
+function genFastX(level){
+  if(level===1){
+    const n=rnd(2,49)*2;
+    return {text:`${n}×5`,answer:n*5,steps:[`${n}×5`,`${n}÷2=${n/2}`,`${n/2}×10=${n*5}`]};
+  }
+  if(level===2){
+    if(Math.random()<.5){const n=rnd(11,99);return {text:`${n}×9`,answer:n*9,steps:[`${n}×9`,`${n}×10−${n}`,`${n*10}−${n}=${n*9}`]};}
+    const n=rnd(11,99);return {text:`${n}×99`,answer:n*99,steps:[`${n}×99`,`${n}×100−${n}`,`${n*100}−${n}=${n*99}`]};
+  }
+  if(Math.random()<.5){const n=rnd(11,99);return {text:`${n}×99`,answer:n*99,steps:[`${n}×99`,`${n}×100−${n}`,`${n*100}−${n}=${n*99}`]};}
+  const n=rnd(1,99)*10;
+  return {text:`${n}÷5`,answer:n/5,steps:[`${n}÷5`,`${n}÷10×2`,`${n/5}`]};
+}
+const GENERATORS={make10:genMake10,compensate:genCompensate,split_mul:genSplitMul,partner25:genPartner25,head_tail:genHeadTail,mul11:genMul11,fast_x:genFastX};
+
+function equivalentPath(q){
+  const t=q.text;
+  switch(q.trickId){
+    case "mul11":{const n=parseInt(t,10);return `${n}×10+${n}=${q.answer}（和拉中间一样）`;}
+    case "split_mul":{const m=t.match(/(\d+)×(\d+)/);return `${m[1]}×${m[2]} 拆成整十和零头分别乘再加`;}
+    case "head_tail":{const m=t.match(/(\d+)×(\d+)/);return `${m[1]}×${m[2]} 列式验算也行，但今天练的是头同尾合十`;}
+    case "compensate":return "把接近整十的数先变成整十，再多退少补";
+    case "make10":return "先把一个数凑到 10，再加剩下的";
+    case "partner25":return "用 25×4=100 的搭档先凑整";
+    case "fast_x":return t.includes("÷")?"÷5 就是 ÷10 再 ×2":"乘 9 就是 ×10 再减一次自己";
+    default:return q.steps.join(" → ");
+  }
+}
+function makeQuestion(trickId,level,seen){
+  level=clamp(level,1,3);
+  let q;
+  for(let i=0;i<8;i++){
+    const raw=GENERATORS[trickId](level);
+    if(!Number.isInteger(raw.answer)||raw.answer<0||raw.answer>1e6)continue;
+    q={id:uid(),trickId,text:raw.text,answer:raw.answer,steps:raw.steps,level,createdAt:Date.now()};
+    if(!seen||!seen.has(q.text))break;
+  }
+  const others=shuffle(TRICKS.filter(t=>t.id!==trickId).map(t=>t.name)).slice(0,2);
+  q.methodOptions=shuffle([TMAP[trickId].name,COPY.drillHard,...others]);
+  q.explainPaths=[
+    {text:q.steps.join(" → "),valid:true},
+    {text:equivalentPath(q),valid:true},
+    {text:/[+−]/.test(q.text)?"列竖式一位位算":"列竖式一位位乘",valid:false}
+  ];
+  return q;
+}
+
+/* ================================================================
+   3. 判定 / SRS / mastery / 排题
+   ================================================================ */
+function verdictOf(q,input,chosen){
+  const right=input===q.answer;
+  const method=chosen===TMAP[q.trickId].name;
+  const hard=chosen===COPY.drillHard;
+  if(right&&method)return "perfect";
+  if(right&&hard)return "lucky";
+  if(right)return "mislabel";
+  if(method)return "slip";
+  return "miss";
+}
+const SRS_DAYS=[1,3,7,14];
+function updateSRS(q,verdict){
+  const i=store.srs.findIndex(s=>s.questionText===q.text);
+  const bad=verdict==="miss"||verdict==="slip";
+  const entry=i>=0?store.srs[i]:{questionText:q.text,payload:q,box:0,nextAt:0};
+  if(bad){entry.box=0;entry.nextAt=Date.now()+86400000;}
+  else{entry.box=clamp(entry.box+1,0,3);entry.nextAt=Date.now()+SRS_DAYS[entry.box]*86400000;}
+  entry.payload=q;
+  if(i>=0)store.srs[i]=entry;else store.srs.push(entry);
+  if(store.srs.length>400)store.srs.shift();
+}
+function levelFor(trickId){
+  const g=store.profile.grade,t=TMAP[trickId],st=store.trickState[trickId];
+  return clamp(1+Math.max(0,g-t.grade)+(st.mastery>=2?1:0),1,3);
+}
+function currentDay(){return clamp(store.streak.days+1,1,7);}
+function focusTrick(){return TRICKS[currentDay()-1];}
+function prevTrick(){
+  const f=focusTrick();
+  let p=TRICKS[clamp(currentDay()-2,0,6)];
+  if(p.id===f.id)p=TRICKS[clamp(currentDay(),0,6)]; // Day1：用下一招做预热，避免整轮同招
+  return p;
+}
+function buildRound(){
+  const focus=focusTrick().id;
+  const prev=prevTrick().id;
+  const pattern=["F","F","P","F","F","P","F","S","P","F"];
+  const seen=new Set(),qs=[];
+  const due=store.srs.filter(s=>s.nextAt<=Date.now()&&s.payload).sort((a,b)=>a.nextAt-b.nextAt);
+  const recentMiss=store.records.filter(r=>r.verdict==="miss").slice(-5);
+  for(let i=0;i<10;i++){
+    let tid;
+    if(pattern[i]==="F")tid=focus;
+    else if(pattern[i]==="P")tid=prev;
+    else{
+      // 间隔复习槽：优先到期错题 → 最近错题 → 新题兜底；text/answer/steps 必须同源
+      let sq=null;
+      if(due.length){const s=due.shift();if(s.payload&&!seen.has(s.payload.text))sq=s.payload;}
+      if(!sq&&recentMiss.length){
+        const r=recentMiss.shift();
+        const s=store.srs.find(x=>x.questionText===r.text);
+        sq=(s&&s.payload&&!seen.has(s.payload.text))?s.payload:makeQuestion(r.trickId,levelFor(r.trickId),seen);
+      }
+      if(sq){
+        sq={...sq,id:uid(),createdAt:Date.now()};
+        if(!sq.explainPaths||!sq.explainPaths.length)sq.explainPaths=[{text:sq.steps.join(" → "),valid:true},{text:equivalentPath(sq),valid:true},{text:/[+−]/.test(sq.text)?"列竖式一位位算":"列竖式一位位乘",valid:false}];
+        seen.add(sq.text);qs.push(sq);continue;
+      }
+      tid=focus;
+    }
+    let q;
+    for(let k=0;k<5;k++){q=makeQuestion(tid,levelFor(tid),seen);if(!seen.has(q.text))break;}
+    seen.add(q.text);qs.push(q);
+    if(!q.explainPaths.length){
+      q.explainPaths=[{text:q.steps.join(" → "),valid:true},{text:equivalentPath(q),valid:true},{text:/[+−]/.test(q.text)?"列竖式一位位算":"列竖式一位位乘",valid:false}];
+    }
+  }
+  // 强校验：连续 3 题同 trick 则与后面（或前面）不同招的题目交换，多轮收敛
+  for(let pass=0;pass<8;pass++){
+    let fixed=false;
+    for(let i=2;i<qs.length;i++){
+      if(qs[i].trickId===qs[i-1].trickId&&qs[i].trickId===qs[i-2].trickId){
+        let j=-1;
+        for(let k=qs.length-1;k>i;k--){if(qs[k].trickId!==qs[i].trickId){j=k;break;}}
+        if(j<0)for(let k=0;k<i-2;k++){if(qs[k].trickId!==qs[i].trickId){j=k;break;}}
+        if(j>=0){[qs[i],qs[j]]=[qs[j],qs[i]];fixed=true;}
+      }
+    }
+    if(!fixed)break;
+  }
+  return qs;
+}
+
+/* ================================================================
+   4. 持久化 store
+   ================================================================ */
+const KEY="kuaizheng:v1";
+function defaultStore(){
+  return {
+    profile:{grade:2,name:"小朋友",createdAt:Date.now()},
+    streak:{days:0,lastDate:"",todayDone:false},
+    trickState:Object.fromEntries(TRICKS.map(t=>[t.id,{unlocked:t.id==="make10",seen:0,correct:0,perfect:0,slip:0,miss:0,lucky:0,mislabel:0,avgMs:0,lastDrillAt:null,mastery:0,missStreak:0}])),
+    records:[],srs:[],explains:[],noticeSeen:false
+  };
+}
+let store=defaultStore();
+function load(){
+  try{const raw=localStorage.getItem(KEY);if(raw){const p=JSON.parse(raw);store={...defaultStore(),...p,trickState:{...defaultStore().trickState,...(p.trickState||{})}};}}catch(e){console.warn("读取本地数据失败，使用默认档",e);}
+}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(store));}catch(e){console.warn("保存失败",e);}}
+
+/* ================================================================
+   5. 运行时状态
+   ================================================================ */
+let drill={session:null,index:0,input:"",chosen:null,phase:"idle",lastQ:null,startedAt:0,reviewTrick:null,explainQ:null};
+let timerId=null,flashTimer=null,parentGate={tries:0,ok:false};
+
+function applyAttempt(q,input,chosen,verdict,ms,timeout){
+  const st=store.trickState[q.trickId];
+  st.seen++;st.lastDrillAt=Date.now();
+  if(verdict==="perfect"||verdict==="lucky"||verdict==="slip")st.correct++;
+  st[verdict]=(st[verdict]||0)+1;
+  st.avgMs=st.seen===1?ms:Math.round(st.avgMs*.8+ms*.2);
+  if(verdict==="miss")st.missStreak=(st.missStreak||0)+1;else st.missStreak=0;
+  const denom=st.perfect+st.miss;
+  if(st.seen>=12&&denom>0&&st.perfect/denom>=.85&&st.avgMs<=TMAP[q.trickId].timeLimit*1000*.6&&st.mastery<3)st.mastery++;
+  if(st.missStreak>=2&&st.mastery>0){st.mastery--;st.missStreak=0;drill.reviewTrick=q.trickId;}
+  if(st.missStreak>=2&&st.mastery===0)drill.reviewTrick=q.trickId;
+  store.records.push({t:Date.now(),trickId:q.trickId,text:q.text,input,chosen,verdict,ms,timeout:!!timeout});
+  if(store.records.length>2000)store.records=store.records.slice(-2000);
+  updateSRS(q,verdict);
+  save();
+}
+
+/* ================================================================
+   6. 页面渲染
+   ================================================================ */
+function topbar(kind){
+  const grades=[1,2,3,4,5,6].map(g=>`<button data-act="grade" data-g="${g}" class="${store.profile.grade===g?"on":""}">${g}</button>`).join("");
+  return `<div class="topbar">
+    <a class="brand" href="#/"><span class="brand-mark">整</span><span>快整计算</span></a>
+    <div class="row wrap">
+      <div class="grade-sel" role="group" aria-label="选择年级">${grades}</div>
+      <a class="linkish" href="#/parent">家长看板 ›</a>
+    </div>
+  </div>`;
+}
+function renderHome(){
+  const t=focusTrick(),st=store.trickState;
+  const hero=`<section class="card pad hero">
+    <div class="hero-tag">${COPY.homeTag} · 第 ${currentDay()} 天</div>
+    <div class="hero-name">${t.name}</div>
+    <div class="hero-slogan">${t.slogan}</div>
+    <div class="hero-demo">${t.demo.split("→").map((s,i)=>`<span class="${i===t.demo.split("→").length-1?"demo-blk":""}">${s.trim()}</span>${i<t.demo.split("→").length-1?'<span class="demo-arrow">→</span>':""}`).join("")}</div>
+    <div class="row wrap">
+      <button class="btn primary" data-act="start">▶ ${COPY.homeStart}</button>
+      <a class="btn ghost" href="#/learn/${t.id}">先看微课</a>
+      <span class="chip"><span class="flame">🔥</span> ${COPY.streak} ${store.streak.days} ${COPY.days}</span>
+    </div>
+  </section>`;
+  const tiles=TRICKS.map((x,i)=>{
+    const s=st[x.id];
+    return `<button class="card trick-tile ${!s.unlocked?"lock":""}" data-act="learn" data-id="${x.id}">
+      <div class="row between"><span class="n">${x.name}</span><span>${s.unlocked?STAMPS[i]:"🔒"}</span></div>
+      <div class="row between"><span class="tiny muted">${x.slogan}</span><span class="mastery">${[0,1,2].map(k=>`<i class="dot ${s.mastery>k?"on":""}"></i>`).join("")}</span></div>
+    </button>`;
+  }).join("");
+  const map=TRICKS.map((x,i)=>{
+    const day=i+1,done=store.streak.days>=day,now=currentDay()===day&&!done;
+    return `<button class="day ${done?"done":now?"today":"lock"}" data-act="learn" data-id="${x.id}">
+      <div class="stamp">${done?STAMPS[i]:"○"}</div><div class="d">Day ${day}</div><div class="t">${x.name}</div>
+    </button>`;
+  }).join("");
+  $("#app").innerHTML=topbar()+hero+
+    `<div class="sec-title"><span class="h2">${COPY.homeFlash}</span><button class="btn sm ghost" data-act="flash">闪 6 张 ›</button></div>
+     <section class="card pad"><div class="grid3">${FLASHCARDS.map(c=>`<div class="slogan-box" style="font-size:20px">${c}</div>`).join("")}</div></section>
+     <div class="sec-title"><span class="h2">${COPY.homeMap}</span><span class="small muted">每天解锁一招</span></div>
+     <section class="card pad"><div class="map">${map}</div>${store.streak.days>=7?`<button class="btn sm ghost" style="margin-top:14px" data-act="export">${COPY.exportCard}</button>`:""}</section>
+     <div class="sec-title"><span class="h2">${COPY.homeTricks}</span><span class="small muted">技巧 > 题量</span></div>
+     <div class="grid3">${tiles}</div>`;
+}
+function renderLearn(id){
+  const t=TMAP[id];
+  if(!t){location.hash="#/";return;}
+  const s=store.trickState[id];
+  const demoParts=t.demo.split("→");
+  const examples=t.examples.map(e=>`<li>${e}</li>`).join("");
+  $("#app").innerHTML=topbar()+`<div class="drill-shell">
+    <div class="row between" style="margin-bottom:16px"><a class="linkish" href="#/">‹ ${COPY.learnBack}</a><span class="chip">建议 ${t.grade} 年级 · ${t.timeLimit}s/题</span></div>
+    <section class="card pad">
+      <div class="h1">${t.name}</div>
+      <div class="small muted" style="margin:6px 0 18px">高频坑：${t.trap}</div>
+      <div class="h2" style="font-size:16px">${COPY.learnDemo}</div>
+      <div class="steps" id="demoSteps">${demoParts.map((p,i)=>`<span class="step-blk ${i===1?"hot":""}" style="animation-delay:${i*120}ms">${p.trim()}</span>${i<demoParts.length-1?'<span class="demo-arrow">→</span>':""}`).join("")}</div>
+      <div class="card pad" style="background:#FFFCF8;box-shadow:none">
+        <div class="row between wrap"><span class="h2" style="font-size:16px">${COPY.learnTry}</span>
+        ${!s.unlocked?`<span class="chip gray">${COPY.learnLocked}</span>`:`<a class="btn sm primary" href="#/drill">${COPY.learnNext}</a>`}</div>
+        <ul class="ex-list">${examples}</ul>
+        <button class="btn sm ghost" data-act="demoagain">再看一遍动画</button>
+      </div>
+      <div class="slogan-box" style="margin-top:18px">${t.slogan}
+        <div class="row" style="justify-content:center;margin-top:10px"><button class="btn sm ghost" data-act="speak" data-text="${esc(t.slogan)}">🔊 ${COPY.learnRead}</button></div>
+      </div>
+      <button class="btn primary block" style="margin-top:18px" data-act="start">▶ ${COPY.homeStart}</button>
+    </section>
+  </div>`;
+}
+function renderDrillIntro(){
+  const t=focusTrick();
+  $("#app").innerHTML=topbar()+`<div class="drill-shell"><section class="card pad center">
+    <div class="chip">本轮 10 题 · 6 新 + 3 旧 + 1 错题</div>
+    <div class="h1" style="margin:14px 0 6px">${t.name}</div>
+    <div class="muted">${t.slogan} · 每题 ${t.timeLimit} 秒</div>
+    <div class="row" style="justify-content:center;margin-top:22px">
+      <button class="btn ghost" data-act="flash">先看闪卡</button>
+      <button class="btn primary" data-act="startnow">直接开始</button>
+    </div>
+  </section></div>`;
+}
+function renderQuestion(){
+  const q=drill.session[drill.index],t=TMAP[q.trickId];
+  const dots=drill.session.map((_,i)=>`<i class="${i<drill.index?"done":i===drill.index?"now":""}"></i>`).join("");
+  $("#app").innerHTML=topbar()+`<div class="drill-shell">
+    <div class="row between" style="margin:4px 2px 14px">
+      <div class="row"><a class="linkish" href="#/">‹ 退出</a><span class="qdots">${dots}</span></div>
+      <div class="timer-wrap"><span id="timerText" class="num" style="font-weight:900;color:var(--green)">${t.timeLimit}s</span><div class="timer-track"><div class="timer-fill" id="timerBar" style="width:100%"></div></div></div>
+    </div>
+    <section class="card pad" id="qcard">
+      <div class="q-text num">${esc(q.text)} = <input id="ansInput" class="ans-input num" inputmode="numeric" autocomplete="off" aria-label="答案" placeholder="?" style="width:180px;height:auto;font-size:clamp(36px,5vw,60px);padding:4px"></div>
+      <div class="h2" style="font-size:16px;margin-top:20px">${COPY.drillMethod}</div>
+      <div class="methods" role="radiogroup" aria-label="我用的招">
+        ${q.methodOptions.map(o=>`<button class="method ${drill.chosen===o?"on":""}" data-act="method" data-m="${esc(o)}" role="radio" aria-checked="${drill.chosen===o}"><span class="rad">${drill.chosen===o?"✓":""}</span>${esc(o)}</button>`).join("")}
+      </div>
+      <button class="btn primary block" id="confirmBtn" data-act="submit" disabled>${COPY.drillCheck}</button>
+      <div class="tiny faint center" style="margin-top:10px">键盘 0-9 输入 · Enter 确定 · Backspace 删除</div>
+    </section>
+  </div>`;
+  const inp=$("#ansInput");if(inp){inp.value=drill.input;inp.focus();}
+  startTimer(t.timeLimit);
+}
+function startTimer(sec){
+  clearInterval(timerId);
+  const t0=Date.now();drill.startedAt=t0;
+  const tick=()=>{
+    const left=Math.max(0,sec-(Date.now()-t0)/1000);
+    const tt=$("#timerText"),tb=$("#timerBar");
+    if(tt){tt.textContent=Math.ceil(left)+"s";tt.style.color=left<3?"var(--warn)":"var(--green)";}
+    if(tb){tb.style.width=(left/sec*100)+"%";tb.classList.toggle("low",left<3);}
+    if(left<=0){clearInterval(timerId);submitAnswer(true);}
+  };
+  timerId=setInterval(tick,100);tick();
+}
+function submitAnswer(timeout){
+  if(drill.phase!=="answering")return;
+  clearInterval(timerId);drill.phase="feedback";
+  const q=drill.session[drill.index];
+  const raw=drill.input.trim();
+  const input=raw===""?null:(Number.isFinite(Number(raw))?Number(raw):null);
+  const chosen=drill.chosen||COPY.drillHard;
+  const ms=Math.min(TMAP[q.trickId].timeLimit*1000,Date.now()-drill.startedAt);
+  const verdict=verdictOf(q,input,chosen);
+  applyAttempt(q,input,chosen,verdict,ms,timeout);
+  drill.lastQ=q;drill.lastVerdict=verdict;
+  renderFeedback(q,verdict,timeout);
+}
+function renderFeedback(q,verdict,timeout){
+  const icon=verdict==="perfect"?"✓":verdict==="lucky"?"!":verdict==="slip"?"~":verdict==="mislabel"?"?":"○";
+  let msg=COPY.fb[verdict];
+  if(verdict==="perfect")msg+=TMAP[q.trickId].name;
+  if(verdict==="mislabel")msg+=`「${TMAP[q.trickId].name}」`;
+  if(timeout)msg=COPY.fb.timeout;
+  const showSteps=verdict==="miss"||verdict==="mislabel"||timeout;
+  const extra=verdict==="lucky"?`<div class="alert">硬算率提示：这题用了 ${TMAP[q.trickId].timeLimit}s 以内的「${TMAP[q.trickId].name}」只要 3 秒。</div>`:"";
+  $("#app").innerHTML=topbar()+`<div class="drill-shell"><section class="card pad fb">
+    <div class="row"><div class="fb-icon ${verdict}">${icon}</div><div><div class="h2">${msg}</div>
+      <div class="small muted" style="margin-top:4px">正确答案 ${q.answer} ${timeout?'· <span class="chip warn">可再快</span>':""}</div></div></div>
+    ${showSteps?`<div style="margin-top:20px"><div class="h2" style="font-size:15px">看一眼怎么拆</div>
+      <div class="steps">${q.steps.map((s,i)=>`<span class="step-blk ${i>0?"hot":""}" style="animation-delay:${i*100}ms">${esc(s)}</span>`).join("")}</div></div>`:""}
+    ${extra}
+    ${drill.reviewTrick?`<div class="alert" style="margin-top:14px;text-align:left">「${TMAP[drill.reviewTrick].name}」连错两次了。${PHRASES.missTrick(TMAP[drill.reviewTrick].name)}<br><a class="btn sm primary" style="margin-top:10px" href="#/learn/${drill.reviewTrick}">${COPY.reviewGo}</a></div>`:""}
+    <button class="btn primary block" style="margin-top:20px" data-act="next">${COPY.next}</button>
+  </section></div>`;
+}
+function openExplain(){
+  drill.phase="explain";drill.explainQ=drill.lastQ;
+  const q=drill.explainQ;
+  $("#app").innerHTML=topbar()+`<div class="drill-shell"><section class="card pad">
+    <div class="chip">说说思路 · 第 ${drill.index+1} 题</div>
+    <div class="h2" style="margin:14px 0 4px">${COPY.explainTitle}</div>
+    <div class="small muted">你刚才是怎么算 ${esc(q.text)} 的？</div>
+    <div class="col" style="margin-top:18px">
+      ${q.explainPaths.map((p,i)=>`<button class="method" data-act="explainopt" data-i="${i}" style="min-height:auto;padding:14px">${esc(p.text)}</button>`).join("")}
+    </div>
+    <textarea id="freeExplain" class="card" style="width:100%;min-height:70px;padding:12px;margin-top:12px;border:2px solid var(--line);border-radius:14px" placeholder="${COPY.explainFree}"></textarea>
+    <div class="row" style="margin-top:12px"><button class="btn primary grow" data-act="explainsubmit">${COPY.explainOk}</button></div>
+  </section></div>`;
+}
+function submitExplain(chosenIdx){
+  const q=drill.explainQ;
+  const free=$("#freeExplain")?$("#freeExplain").value.trim():"";
+  let ok=false;
+  if(chosenIdx!==null&&q.explainPaths[chosenIdx])ok=q.explainPaths[chosenIdx].valid;
+  if(!ok&&free){
+    const nums=(q.text.match(/\d+/g)||[]).filter(n=>Number(n)>1);
+    const hits=nums.filter(n=>free.includes(n)).length;
+    const kw=/凑|补偿|整十|拉开|中间|进位|拆|搭档|折半|减一次|翻倍/.test(free);
+    ok=(hits>=1||kw)&&!/竖式|笔算/.test(free);
+  }
+  store.explains.push({t:Date.now(),text:q.text,input:free,choice:chosenIdx,ok});
+  if(store.explains.length>500)store.explains.shift();
+  save();
+  drill.phase="explainfb";
+  $("#app").innerHTML=topbar()+`<div class="drill-shell"><section class="card pad fb center">
+    <div class="fb-icon ${ok?"perfect":"miss"}" style="margin:0 auto">${ok?"✓":"○"}</div>
+    <div class="h2" style="margin-top:14px">${ok?COPY.explainRight:COPY.explainWrong}</div>
+    <div class="steps" style="justify-content:center">${q.steps.map(s=>`<span class="step-blk">${esc(s)}</span>`).join("")}</div>
+    <button class="btn primary block" style="margin-top:16px" data-act="next">${COPY.next}</button>
+  </section></div>`;
+}
+function renderResult(){
+  clearInterval(timerId);
+  const today=dayKey();
+  if(store.streak.lastDate!==today){
+    const y=new Date();y.setDate(y.getDate()-1);
+    store.streak.days=store.streak.lastDate===dayKey(y.getTime())?store.streak.days+1:1;
+    store.streak.lastDate=today;
+  }
+  store.streak.todayDone=true;
+  const ni=clamp(currentDay(),0,6);
+  if(TRICKS[ni]&&TRICKS[ni].id!==focusTrick().id)store.trickState[TRICKS[ni].id].unlocked=true;
+  save();
+  const recs=store.records.filter(r=>dayKey(r.t)===today);
+  const cnt={perfect:0,lucky:0,mislabel:0,slip:0,miss:0};
+  recs.forEach(r=>{if(cnt[r.verdict]!==undefined)cnt[r.verdict]++;});
+  const hard=cnt.perfect+cnt.lucky>0?Math.round(cnt.lucky/(cnt.perfect+cnt.lucky)*100):0;
+  const needReview=!!drill.reviewTrick;
+  $("#app").innerHTML=topbar()+`<div class="drill-shell"><section class="card pad center">
+    <div class="h1">${COPY.resultTitle} 🎉</div>
+    <div class="row" style="justify-content:center;margin:12px 0 20px">
+      <span class="chip green">✓ 熟练 ${cnt.perfect}</span><span class="chip warn">~ 手滑 ${cnt.slip}</span>
+      <span class="chip">! 硬算 ${cnt.lucky}</span><span class="chip gray">○ 再看 ${cnt.miss}</span>
+    </div>
+    <div class="grid3">
+      <div class="metric"><div class="v">${hard}%</div><div class="tiny muted">今日硬算率</div></div>
+      <div class="metric"><div class="v">🔥 ${store.streak.days}</div><div class="tiny muted">连续天数</div></div>
+      <div class="metric"><div class="v">${TMAP[focusTrick().id].name}</div><div class="tiny muted">今日一招</div></div>
+    </div>
+    ${hard>30?`<div class="alert" style="margin-top:16px;text-align:left">${PHRASES.highLucky(cnt.lucky)}</div>`:""}
+    ${needReview?`<div class="alert" style="margin-top:12px;text-align:left">「${TMAP[drill.reviewTrick].name}」连错两次，${PHRASES.missTrick(TMAP[drill.reviewTrick].name)}</div>`:""}
+    <div class="row wrap" style="justify-content:center;margin-top:24px">
+      <button class="btn primary" data-act="start">${COPY.resultAgain}</button>
+      <a class="btn ghost" href="#/">${COPY.resultHome}</a>
+      <a class="btn ghost" href="#/parent">${COPY.resultParent}</a>
+    </div>
+  </section></div>`;
+}
+
+/* ---------- 闪卡 / 弹层 / 家长端 ---------- */
+let flashState={i:0,paint:null};
+function openFlash(){
+  flashState.i=0;
+  const root=$("#overlay");
+  const paint=()=>{
+    const i=flashState.i;
+    root.innerHTML=`<div class="overlay"><div class="modal" style="max-width:680px">
+      <div class="row between"><b>${COPY.flashTitle}</b><span class="small muted">${i+1} / ${FLASHCARDS.length}</span></div>
+      <div class="flash-progress"><div style="height:100%;background:var(--orange);width:${((i+1)/FLASHCARDS.length)*100}%;transition:width .3s"></div></div>
+      <div class="flash-card">${FLASHCARDS[i]}</div>
+      <div class="row" style="margin-top:16px"><button class="btn sm ghost grow" data-act="flashskip">${COPY.flashSkip}</button><button class="btn sm primary grow" data-act="flashnext">${i===FLASHCARDS.length-1?"开始训练":COPY.next}</button></div>
+    </div></div>`;
+  };
+  flashState.paint=paint;
+  clearInterval(flashTimer);paint();
+  flashTimer=setInterval(()=>{flashState.i++;if(flashState.i>=FLASHCARDS.length){clearInterval(flashTimer);root.innerHTML="";beginRound();}else paint();},5000);
+}
+function flashAdvance(){clearInterval(flashTimer);flashState.i++;if(flashState.i>=FLASHCARDS.length)closeFlash(true);else flashState.paint();}
+function closeFlash(start){clearInterval(flashTimer);$("#overlay").innerHTML="";if(start)beginRound();}
+function beginRound(){drill.session=buildRound();drill.index=0;drill.input="";drill.chosen=null;drill.phase="answering";drill.reviewTrick=null;drill.explainQ=null;location.hash="#/drill";if(location.hash==="#/drill")renderQuestion();}
+function renderParentGate(){
+  if(parentGate.ok){renderParent();return;}
+  const a=rnd(11,99),b=rnd(3,9);parentGate.answer=a*b;parentGate.q=`${a} × ${b} = ?`;
+  $("#app").innerHTML=topbar()+`<div class="drill-shell"><section class="card pad center">
+    <div class="h1" style="font-size:28px">${COPY.parentTitle}</div>
+    <div class="muted" style="margin:8px 0 18px">${COPY.parentTip}</div>
+    <div class="q-text num" style="font-size:44px">${parentGate.q}</div>
+    <input id="gateInput" class="ans-input num" inputmode="numeric" style="max-width:240px;margin:0 auto" aria-label="家长验证答案">
+    <button class="btn primary" style="margin-top:16px" data-act="gatecheck">确定</button>
+    <div class="tiny muted" style="margin-top:12px">答错 2 次将退回首页 · 剩余 ${2-parentGate.tries} 次</div>
+    <div><a class="linkish" href="#/">${COPY.parentBack}</a></div>
+  </section></div>`;
+  setTimeout(()=>{const el=$("#gateInput");if(el)el.focus();},0);
+}
+function radarSVG(){
+  const w=340,h=310,cx=170,cy=150,R=104,n=7;
+  const pt=(i,r)=>{const a=-Math.PI/2+i*2*Math.PI/n;return [cx+Math.cos(a)*r,cy+Math.sin(a)*r];};
+  const poly=rs=>rs.map((r,i)=>pt(i,r).map(v=>v.toFixed(1)).join(",")).join(" ");
+  let s=`<svg viewBox="0 0 ${w} ${h}" width="340" height="310" role="img" aria-label="技巧掌握雷达图">`;
+  [1/3,2/3,1].forEach(f=>s+=`<polygon points="${poly(Array(n).fill(R*f))}" fill="none" stroke="#EADFD2" stroke-width="1"/>`);
+  TRICKS.forEach((t,i)=>{const[x,y]=pt(i,R);s+=`<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="#EADFD2"/>`;const[lx,ly]=pt(i,R+22);s+=`<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="700" fill="#7C7369">${t.name}</text>`;});
+  const vals=TRICKS.map((t,i)=>pt(i,Math.max(2,store.trickState[t.id].mastery/3*R)));
+  s+=`<polygon points="${vals.map(p=>p.map(v=>v.toFixed(1)).join(",")).join(" ")}" fill="rgba(255,138,61,.25)" stroke="#FF8A3D" stroke-width="2.5"/>`;
+  vals.forEach(p=>s+=`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3.5" fill="#FF8A3D"/>`);
+  return s+"</svg>";
+}
+function todayPhrase(){
+  const today=dayKey(),recs=store.records.filter(r=>dayKey(r.t)===today);
+  const lucky=recs.filter(r=>r.verdict==="lucky").length;
+  const perfect=recs.filter(r=>r.verdict==="perfect").length;
+  const slip=recs.filter(r=>r.verdict==="slip").length,miss=recs.filter(r=>r.verdict==="miss").length;
+  const byTrick={};recs.filter(r=>r.verdict==="perfect").forEach(r=>{(byTrick[r.trickId]=byTrick[r.trickId]||[]).push(r.ms);});
+  const best=Object.entries(byTrick).sort((a,b)=>b[1].length-a[1].length)[0];
+  if(lucky/(perfect+lucky||1)>.3)return PHRASES.highLucky(lucky);
+  if(miss>=2){const t=Object.keys(store.trickState).find(k=>store.trickState[k].missStreak>=2);if(t)return PHRASES.missTrick(TMAP[t].name);}
+  if(slip>miss&&slip>=2)return PHRASES.slipHeavy();
+  if(best&&best[1].length>=4){const avg=Math.round(best[1].reduce((a,b)=>a+b,0)/best[1].length/1000*10)/10;return PHRASES.great(TMAP[best[0]].name,avg);}
+  if(store.streak.days>=2)return PHRASES.streak(store.streak.days);
+  return "今天开始用招了。比做对多少更值钱的，是能讲出怎么算。";
+}
+function renderParent(){
+  const recs=store.records.slice(-400);
+  const lucky=recs.filter(r=>r.verdict==="lucky").length,perfect=recs.filter(r=>r.verdict==="perfect").length;
+  const slip=recs.filter(r=>r.verdict==="slip").length,miss=recs.filter(r=>r.verdict==="miss").length;
+  const hard=perfect+lucky>0?Math.round(lucky/(perfect+lucky)*100):0;
+  const days=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const key=dayKey(d.getTime());const rs=store.records.filter(r=>dayKey(r.t)===key);const good=rs.filter(r=>["perfect","lucky","slip"].includes(r.verdict)).length;days.push({lb:(d.getMonth()+1)+"/"+d.getDate(),rate:rs.length?good/rs.length:0,n:rs.length});}
+  const maxRate=Math.max(.1,...days.map(d=>d.rate));
+  const trend=days.map(d=>`<div class="tb"><div class="num tiny">${d.n||""}</div><div class="b" style="height:${Math.max(3,d.rate/maxRate*90)}px;background:${d.rate>=.8?"var(--green)":"var(--warn)"}"></div><div class="lb">${d.lb}</div></div>`).join("");
+  $("#app").innerHTML=topbar()+`<div class="row between" style="margin-bottom:16px"><div><div class="h1" style="font-size:30px">家长看板</div><div class="small muted">只看方法，不看排名 · 数据仅存本机</div></div><a class="linkish" href="#/">‹ 回首页</a></div>
+  <div class="grid2">
+    <section class="card pad"><div class="h2" style="font-size:18px;margin-bottom:8px">技巧掌握雷达</div><div class="radar-wrap">${radarSVG()}<div class="col grow">
+      ${TRICKS.map(t=>{const s=store.trickState[t.id];return `<div><div class="row between tiny"><span>${t.name}</span><b>${s.mastery}/3</b></div><div class="bar"><i style="width:${s.mastery/3*100}%"></i></div></div>`;}).join("")}
+    </div></div></section>
+    <section class="card pad"><div class="h2" style="font-size:18px;margin-bottom:12px">核心健康度</div>
+      <div class="grid2">
+        <div class="metric"><div class="v" style="color:${hard>30?"var(--orange-d)":"var(--green)"}">${hard}%</div><div class="tiny muted">硬算率 lucky/(perfect+lucky)</div></div>
+        <div class="metric"><div class="v">${slip} : ${miss}</div><div class="tiny muted">手滑 : 没懂（slip:miss）</div></div>
+      </div>
+      <div class="alert" style="margin-top:14px">${hard>30?PHRASES.highLucky(lucky):miss>slip?"失误里「没懂」偏多，概念要先讲通。":"硬算率在健康区间，保持用招。"}</div>
+      <div class="h2" style="font-size:16px;margin:18px 0 6px">7 天趋势（答对率）</div>
+      <div class="trend">${trend}</div>
+    </section>
+  </div>
+  <section class="card pad" style="margin-top:16px"><div class="chip">今日一句辅导话术</div>
+    <div style="font-size:20px;font-weight:700;line-height:1.8;margin-top:12px">${todayPhrase()}</div>
+    <div class="row wrap" style="margin-top:16px"><button class="btn sm ghost" data-act="export">${COPY.exportCard}</button><button class="btn sm ghost" data-act="speak" data-text="${esc(todayPhrase())}">🔊 念出来</button></div>
+  </section>`;
+}
+
+/* ================================================================
+   7. A4 练习卡（用浏览器打印代替 PDF 库，零外部依赖）
+   ================================================================ */
+function exportPracticeCard(){
+  const focus=focusTrick().id;
+  const seen=new Set(),qs=[];
+  TRICKS.forEach(t=>{for(let i=0;i<3&&qs.length<20;i++){const q=makeQuestion(t.id,levelFor(t.id),seen);seen.add(q.text);qs.push(q);}});
+  while(qs.length<20){const q=makeQuestion(focus,1,seen);seen.add(q.text);qs.push(q);}
+  const slogans=TRICKS.map(t=>`${t.name}：${t.slogan}`).join("　·　");
+  $("#printCard").innerHTML=`<div class="pc-h">快整计算 · A4 练习卡（第 ${currentDay()} 天）</div>
+    <div class="pc-meta">姓名 __________  日期 __________  用时 __________  今日一招：${TMAP[focus].name}</div>
+    <div class="pc-grid">${qs.map((q,i)=>`<div>${i+1}. ${esc(q.text)} ＝ ______</div>`).join("")}</div>
+    <div class="pc-fold">✂ 沿此线折起 · 以下是答案与口诀</div>
+    <div class="pc-ans">${qs.map((q,i)=>`<div>${i+1}. ${q.answer}</div>`).join("")}</div>
+    <div class="pc-meta" style="margin-top:14px">${slogans}</div>`;
+  window.print();
+}
+
+/* ================================================================
+   8. 路由 / 事件
+   ================================================================ */
+function render(){
+  clearInterval(timerId);
+  const hash=(location.hash||"#/").slice(1);
+  if(hash.startsWith("/learn/"))renderLearn(hash.split("/")[2]);
+  else if(hash==="/parent")renderParentGate();
+  else if(hash==="/drill"){
+    if(!drill.session||drill.phase==="idle")renderDrillIntro();
+    else if(drill.phase==="answering")renderQuestion();
+    else if(drill.phase==="result")renderResult();
+    else if(drill.phase==="explainfb"){/* 保持已渲染内容 */}
+  }
+  else{if(drill.session)drill.session=null;renderHome();}
+  renderOverlay();
+}
+function renderOverlay(){
+  if(!store.noticeSeen){
+    $("#overlay").innerHTML=`<div class="overlay"><div class="modal center">
+      <div style="font-size:46px">🔒</div><div class="h1" style="font-size:26px;margin:10px 0">${COPY.noticeTitle}</div>
+      <div class="muted" style="line-height:1.8">${COPY.noticeBody}</div>
+      <button class="btn primary block" style="margin-top:20px" data-act="noticeok">${COPY.noticeBtn}</button>
+    </div></div>`;
+  }
+}
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-act]");if(!b)return;
+  const a=b.dataset.act;
+  switch(a){
+    case "noticeok":store.noticeSeen=true;save();$("#overlay").innerHTML="";break;
+    case "grade":store.profile.grade=Number(b.dataset.g);save();render();break;
+    case "start":closeFlash(true);break;
+    case "startnow":beginRound();break;
+    case "learn":location.hash="#/learn/"+b.dataset.id;break;
+    case "demoagain":renderLearn(location.hash.split("/")[2]);break;
+    case "speak":{
+      if("speechSynthesis" in window){const u=new SpeechSynthesisUtterance(b.dataset.text);u.lang="zh-CN";u.rate=.9;speechSynthesis.cancel();speechSynthesis.speak(u);}
+      break;
+    }
+    case "flash":openFlash();break;
+    case "flashnext":flashAdvance();break;
+    case "flashskip":closeFlash(false);break;
+    case "export":exportPracticeCard();break;
+    case "method":{
+      if(drill.phase!=="answering")return;
+      drill.chosen=b.dataset.m;
+      document.querySelectorAll(".method").forEach(m=>{const on=m.dataset.m===drill.chosen;m.classList.toggle("on",on);m.setAttribute("aria-checked",on);m.querySelector(".rad").textContent=on?"✓":"";});
+      updateConfirm();break;
+    }
+    case "submit":submitAnswer(false);break;
+    case "next":{
+      // 讲思路卡结束后才进入下一题；普通反馈后先插入讲思路（第 5、10 题）
+      if(drill.phase!=="explainfb"){
+        if(drill.reviewTrick&&drill.index===drill.session.length-1){const t=drill.reviewTrick;drill.reviewTrick=null;location.hash="#/learn/"+t;break;}
+        if(drill.index===4||drill.index===9){openExplain();break;}
+      }
+      drill.index++;
+      if(drill.index>=drill.session.length){drill.phase="result";location.hash="#/drill";renderResult();break;}
+      drill.input="";drill.chosen=null;drill.phase="answering";location.hash="#/drill";renderQuestion();break;
+    }
+    case "explainopt":submitExplain(Number(b.dataset.i));break;
+    case "explainsubmit":submitExplain(null);break;
+    case "gatecheck":{
+      const v=Number($("#gateInput").value);
+      if(v===parentGate.answer){parentGate.ok=true;renderParent();}
+      else{parentGate.tries++;if(parentGate.tries>=2){parentGate.tries=0;parentGate.ok=false;location.hash="#/";}else renderParentGate();}
+      break;
+    }
+  }
+});
+function updateConfirm(){
+  const btn=$("#confirmBtn");if(!btn)return;
+  btn.disabled=!drill.input.trim()||!drill.chosen;
+}
+document.addEventListener("input",e=>{
+  if(e.target.id==="ansInput"){drill.input=e.target.value.replace(/[^\d]/g,"").slice(0,7);e.target.value=drill.input;updateConfirm();}
+});
+document.addEventListener("keydown",e=>{
+  if(!store.noticeSeen)return;
+  if(location.hash==="#/parent"&&!parentGate.ok&&e.key==="Enter"){$("[data-act=gatecheck]")?.click();return;}
+  if(location.hash!=="#/drill"||drill.phase!=="answering")return;
+  if(e.key==="Enter"){e.preventDefault();if(!$("#confirmBtn")?.disabled)submitAnswer(false);}
+  else if(/^[0-9]$/.test(e.key)&&document.activeElement?.id!=="ansInput"){$("#ansInput")?.focus();}
+});
+window.addEventListener("hashchange",render);
+
+/* ================================================================
+   9. 属性自测（对应文档「生成器随机 1000 次」硬约束）
+   ================================================================ */
+function runSelfTest(){
+  const seen=new Set();let n=0,fail=[];
+  for(let i=0;i<1000;i++){
+    const t=TRICKS[i%7],lv=(i%3)+1,q=makeQuestion(t.id,lv,seen);seen.add(q.text);n++;
+    if(!Number.isInteger(q.answer)||q.answer<0||q.answer>1e6)fail.push(`${t.id}:非法答案 ${q.answer}`);
+    if(q.methodOptions.length!==4||new Set(q.methodOptions).size!==4)fail.push(`${t.id}:方法选项异常`);
+    if(!q.methodOptions.includes(t.name))fail.push(`${t.id}:缺正确招名`);
+    const m=q.text.replace(/[−-]/g,"-").replace(/×/g,"*").replace(/÷/g,"/").match(/[\d.]+|[-+*/()]/g);
+    if(!m)fail.push(`${t.id}:题面无法解析 ${q.text}`);
+    else{try{const v=Function('"use strict";return ('+m.join("")+')')();if(v!==q.answer)fail.push(`${t.id}:${q.text} 重算=${v} 答案=${q.answer}`);}catch(err){fail.push(`${t.id}:重算异常 ${q.text}`);}}
+    if(t.id==="head_tail"&&q.level===3){const mm=q.text.match(/(\d+)×(\d+)/);if(mm&&mm[1][0]!==mm[2][0])fail.push("head_tail:十位不同");}
+    if(t.id==="mul11"&&q.level===1){const nn=parseInt(q.text,10);if((nn%10+Math.floor(nn/10))>=10)fail.push("mul11:L1进位");}
+    if(t.id==="fast_x"&&q.text.includes("÷")&&Number(q.text.match(/\d+/)[0])%10!==0)fail.push("fast_x:÷5非整十");
+  }
+  const uniq=new Set([...seen]);
+  const res={count:n,uniqueTexts:uniq.size,failures:fail.slice(0,10),failCount:fail.length};
+  console.info("[快整计算] 生成器属性自测",res);
+  return res;
+}
+window.__kzTest=runSelfTest;
+
+/* 启动 */
+load();
+render();
+runSelfTest();
+</script>
+</body>
+</html>
