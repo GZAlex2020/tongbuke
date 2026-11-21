@@ -11,12 +11,14 @@
   var SP = window.Speech;
   var DATA = window.UNIT_DATA;
   var BD = window.BasicData || null;   /* 目录空白单元的基础学习内容生成器 */
-  var SB = window.StrokeBook || {
+  /* 笔顺引擎为异步加载，不能在模块顶层快照；使用时惰性读取 */
+  var SB_FALLBACK = {
     has: function () { return false; }, info: function () { return {}; }, count: function () { return 0; },
-    stepsHtml: function () { return ''; }, gridSvg: function () { return ''; },
+    stepsHtml: function () { return ''; }, gridSvg: function () { return ''; }, stepSvg: function () { return ''; },
     create: function () { return null; }, call: function () { return false; },
     quiz: function () { return false; }, supported: false, note: ''
   };
+  function sb() { return window.StrokeBook || SB_FALLBACK; }
   var MD = window.MathDrill;
   var TEXTS = window.TEXT_DATA || {};
 
@@ -419,7 +421,7 @@
   /* ---------------- 主区 ---------------- */
   function renderMain() {
     /* innerHTML 重绘前先释放上一个笔顺动画实例 */
-    if (S.writer) { SB.call(S.writer, 'cancelQuiz'); S.writer = null; }
+    if (S.writer) { sb().call(S.writer, 'cancelQuiz'); S.writer = null; }
     S.strokeQuiz = false;
     ensureModule();
     if (!C.isReady(S.grade)) { renderLocked(); return; }
@@ -669,15 +671,15 @@
 
     var cur = chars[0];
     chars.forEach(function (x) { if (x.ch === S.strokeChar) cur = x; });
-    var info = SB.info(S.strokeChar) || {};
-    var hasData = SB.has(S.strokeChar);
-    var n = hasData ? SB.count(S.strokeChar) : (info.n || 0);
+    var info = sb().info(S.strokeChar) || {};
+    var hasData = sb().has(S.strokeChar);
+    var n = hasData ? sb().count(S.strokeChar) : (info.n || 0);
 
     var h = '<section class="card stroke-pick-card">' +
       sectionHead('pencil', '本课生字 · 点一个字看笔顺', '共 ' + chars.length + ' 个生字，均可点读发音、看笔顺、练描红') +
       '<div class="char-strip">';
     chars.forEach(function (x) {
-      var mi = SB.info(x.ch) || {};
+      var mi = sb().info(x.ch) || {};
       h += '<button class="char-chip ' + (x.ch === S.strokeChar ? 'on' : '') + '" data-act="stroke-pick" data-v="' + esc(x.ch) + '">' +
         '<b>' + esc(x.ch) + '</b><small>' + esc(x.p || '') + '</small>' +
         (mi.n ? '<i>' + mi.n + ' 笔</i>' : '') + '</button>';
@@ -688,8 +690,8 @@
     h += '<section class="card stroke-stage-card">' +
       sectionHead('book', '田字格笔顺演示', '红色为当前笔，深灰为已写过的笔画') +
       '<div class="hw-stage" data-mode="' + (S.strokeStep > 0 ? 'static' : 'animate') + '">' +
-      '<div class="hw-grid">' + SB.gridSvg(true) + '</div>' +
-      '<div class="hw-static">' + (S.strokeStep > 0 ? SB.stepSvg(S.strokeChar, S.strokeStep) : '') + '</div>' +
+      '<div class="hw-grid">' + sb().gridSvg(true) + '</div>' +
+      '<div class="hw-static">' + (S.strokeStep > 0 ? sb().stepSvg(S.strokeChar, S.strokeStep) : '') + '</div>' +
       '<div class="hw-target" id="hw-target"></div></div>' +
       '<div class="stroke-ctl">' +
       '<button class="btn primary" data-act="stroke-animate">' + ic('play') + '播放笔顺</button>' +
@@ -699,7 +701,7 @@
       '<button class="btn" data-act="stop">' + ic('stop') + '停止</button></div>' +
       '<p class="stroke-status" id="stroke-status">' +
       (!hasData ? '这个字暂缺笔顺路径数据，可先看拼音与组词。'
-        : (SB.supported ? '点「播放笔顺」看一笔一画；点「描红练习」可用鼠标或手指在田字格里写字。'
+        : (sb().supported ? '点「播放笔顺」看一笔一画；点「描红练习」可用鼠标或手指在田字格里写字。'
           : '笔顺动画库未加载，下方逐笔分解图仍可正常使用。')) + '</p></section>';
 
     h += '<section class="card stroke-info-card">' +
@@ -728,14 +730,14 @@
         h += '<button class="order-chip ' + (S.strokeStep === i + 1 ? 'on' : '') + '" data-act="stroke-step" data-v="' + (i + 1) + '">' +
           (i + 1) + '. ' + esc(name) + '</button>';
       });
-      h += '</div>' + (SB.note ? '<p class="order-note">' + ic('info') + esc(SB.note) + '</p>' : '') + '</div>';
+      h += '</div>' + (sb().note ? '<p class="order-note">' + ic('info') + esc(sb().note) + '</p>' : '') + '</div>';
     }
     h += '</section></div>';
 
     h += '<section class="card stroke-steps-card">' +
       sectionHead('list', '逐笔分解图', '第 N 格显示写到第 N 笔的样子，红色就是新写的那一笔') +
       '<div class="step-grid">' +
-      (hasData ? SB.stepsHtml(S.strokeChar, S.strokeStep) : '<p class="muted">该字暂无笔顺路径数据，可对照课本笔顺表练习。</p>') +
+      (hasData ? sb().stepsHtml(S.strokeChar, S.strokeStep) : '<p class="muted">该字暂无笔顺路径数据，可对照课本笔顺表练习。</p>') +
       '</div></section>';
 
     h += '<div class="next-bar"><span>字认牢了？去做课后复习，把要点和题目过一遍。</span>' +
@@ -746,13 +748,13 @@
   /** innerHTML 重绘后重新挂载笔顺动画实例 */
   function mountStrokeWriter() {
     var el = $('#hw-target');
-    if (!el || !SB.has(S.strokeChar)) return;
-    var w = SB.create(el, S.strokeChar, { width: 240, height: 240 });
+    if (!el || !sb().has(S.strokeChar)) return;
+    var w = sb().create(el, S.strokeChar, { width: 240, height: 240 });
     if (!w) return;
     S.writer = w;
     setTimeout(function () {
       if (S.writer !== w) return;
-      SB.call(w, 'showCharacter');
+      sb().call(w, 'showCharacter');
     }, 120);
   }
 
@@ -1312,11 +1314,33 @@
         /* 只允许切到当前学科开放的模块，防止串科标签被点击后落到错误内容 */
         var allowed = activeModules().some(function (m) { return m.id === v; });
         if (!allowed) break;
+        /* 生字笔顺依赖离线字库，先显示占位再按需加载，禁止静默空白 */
+        if (v === 'strokes' && window.loadHanzi && !window.__hzReady) {
+          S.module = v; markVisited(v); SP.stop();
+          var hzBox = $('#content');
+          if (hzBox) hzBox.innerHTML = '<section class="card empty-card"><h3>正在准备生字卡…</h3><p>首次打开需加载离线笔顺数据，请稍候。</p></section>';
+          window.loadHanzi('module:strokes').catch(function () {
+            if (S.module !== 'strokes') return;
+            var b2 = $('#content');
+            if (b2) b2.innerHTML = '<section class="card empty-card"><h3>生字卡加载失败</h3><p>请检查网络后重试。</p><button class="btn primary" data-act="retry-hanzi">重新加载</button></section>';
+          });
+          break;
+        }
         S.module = v; markVisited(v); SP.stop();
         if (v === 'challenge') resetChallenge();
         if (v === 'strokes') S.strokeStep = 0;
         renderMain();
         var sc2 = document.querySelector('.main'); if (sc2) sc2.scrollTop = 0;
+        break;
+      }
+      case 'retry-hanzi': {
+        window.__hzPending = null; window.__hzLoaded = false;
+        var retryBox = $('#content');
+        if (retryBox) retryBox.innerHTML = '<section class="card empty-card"><h3>正在重新加载…</h3></section>';
+        window.loadHanzi('retry').catch(function () {
+          var b3 = $('#content');
+          if (b3 && S.module === 'strokes') b3.innerHTML = '<section class="card empty-card"><h3>生字卡加载失败</h3><p>请检查网络后重试。</p><button class="btn primary" data-act="retry-hanzi">重新加载</button></section>';
+        });
         break;
       }
       case 'speak': {
@@ -1360,7 +1384,7 @@
       }
       case 'stop':
         SP.stop();
-        if (S.writer) { SB.call(S.writer, 'cancelQuiz'); SB.call(S.writer, 'showCharacter'); }
+        if (S.writer) { sb().call(S.writer, 'cancelQuiz'); sb().call(S.writer, 'showCharacter'); }
         S.strokeQuiz = false;
         $$('.speaking').forEach(function (x) { x.classList.remove('speaking'); });
         clearMultHighlight();
@@ -1444,25 +1468,25 @@
         break;
       case 'stroke-animate':
         if (!S.writer) { setStrokeStatus('笔顺动画库未加载，可使用下方逐笔分解图练习。'); break; }
-        SB.call(S.writer, 'cancelQuiz'); S.strokeQuiz = false; S.strokeStep = 0;
+        sb().call(S.writer, 'cancelQuiz'); S.strokeQuiz = false; S.strokeStep = 0;
         setStrokeMode('animate');
-        SB.call(S.writer, 'animateCharacter');
+        sb().call(S.writer, 'animateCharacter');
         setStrokeStatus('正在演示「' + S.strokeChar + '」的笔顺：看清起笔位置和行笔方向。');
         $$('.step-cell').forEach(function (x) { x.classList.remove('on'); });
         $$('.order-chip').forEach(function (x) { x.classList.remove('on'); });
         break;
       case 'stroke-loop':
         if (!S.writer) break;
-        SB.call(S.writer, 'cancelQuiz'); S.strokeQuiz = false; S.strokeStep = 0;
+        sb().call(S.writer, 'cancelQuiz'); S.strokeQuiz = false; S.strokeStep = 0;
         setStrokeMode('animate');
-        SB.call(S.writer, 'loopCharacterAnimation');
+        sb().call(S.writer, 'loopCharacterAnimation');
         setStrokeStatus('循环播放中：跟着一笔一画书空，点「停止」结束。');
         break;
       case 'stroke-show':
         if (!S.writer) break;
-        SB.call(S.writer, 'cancelQuiz'); S.strokeQuiz = false; S.strokeStep = 0;
+        sb().call(S.writer, 'cancelQuiz'); S.strokeQuiz = false; S.strokeStep = 0;
         setStrokeMode('animate');
-        SB.call(S.writer, 'showCharacter');
+        sb().call(S.writer, 'showCharacter');
         setStrokeStatus('已显示完整字形，对照田字格看看每一笔的位置。');
         $$('.step-cell').forEach(function (x) { x.classList.remove('on'); });
         $$('.order-chip').forEach(function (x) { x.classList.remove('on'); });
@@ -1471,10 +1495,10 @@
         if (!S.writer) { setStrokeStatus('笔顺动画库未加载，描红练习暂不可用。'); break; }
         S.strokeStep = 0;
         setStrokeMode('animate');
-        SB.call(S.writer, 'cancelQuiz');
+        sb().call(S.writer, 'cancelQuiz');
         $$('.step-cell').forEach(function (x) { x.classList.remove('on'); });
         $$('.order-chip').forEach(function (x) { x.classList.remove('on'); });
-        S.strokeQuiz = SB.quiz(S.writer, {
+        S.strokeQuiz = sb().quiz(S.writer, {
           onStroke: function () { setStrokeStatus('写得对！继续写下一笔……'); },
           onMistake: function () { setStrokeStatus('这一笔起笔位置再看看，浅色轮廓是提示。'); },
           onComplete: function () { setStrokeStatus('全部写对啦！可以点「播放笔顺」再看一遍，或换一个字练。'); }
@@ -1581,6 +1605,10 @@
     document.addEventListener('change', handleChange);
     document.addEventListener('input', function (e) { if (e.target.dataset.act === 'rate') handleChange(e); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+    /* 字库就绪后：若正停在笔顺页（含 idle 预取场景），补渲染一次 */
+    document.addEventListener('hanzi:ready', function () {
+      if (S.module === 'strokes') renderMain();
+    });
     S.unitIndex = firstReadyUnit();
     markVisited('preview');
     renderAll();

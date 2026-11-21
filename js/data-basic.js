@@ -17,9 +17,10 @@
 
   var CATALOG = window.APP_CONFIG;
   var UNIT = window.UNIT_DATA || {};
-  var PY = window.HANZI_PINYIN || {};
-  var WD = window.HANZI_WORDS || {};
-  var META = window.HANZI_META || {};
+  /* 字库为异步加载，不能在模块顶层快照；一律在使用时惰性读取 */
+  function pyOf(ch) { return ((window.HANZI_PINYIN || {})[ch]) || ''; }
+  function wordsOf(ch) { return (window.HANZI_WORDS || {})[ch] || []; }
+  function metaOf(ch) { return (window.HANZI_META || {})[ch] || {}; }
   var EX = window.SubjectBank || null;   /* 初中六大学科分科词库 */
   var cache = {};
 
@@ -66,8 +67,8 @@
   function chineseWords(g, v, title) {
     var cs = cnChars(clean(title)).slice(0, 6);
     var out = cs.map(function (ch) {
-      var ws = (WD[ch] || []).slice(0, 2).join('、');
-      return ch + '|' + (PY[ch] || '') + '|' + (ws || '读一读，组个词');
+      var ws = wordsOf(ch).slice(0, 2).join('、');
+      return ch + '|' + pyOf(ch) + '|' + (ws || '读一读，组个词');
     });
     /* 两字标题（如「江南」「影子」）补到 5 个：优先本册精编字词，
        让听写、听音辨词、笔顺练习都有足够素材。 */
@@ -83,7 +84,7 @@
     for (var i = 0; i < FALLBACK_CHARS.length && out.length < 5; i++) {
       var c = FALLBACK_CHARS[(seed + i) % FALLBACK_CHARS.length];
       if (out.some(function (x) { return x.split('|')[0] === c; })) continue;
-      out.push(c + '|' + (PY[c] || '') + '|' + ((WD[c] || []).slice(0, 2).join('、') || '读一读，组个词'));
+      out.push(c + '|' + pyOf(c) + '|' + (wordsOf(c).slice(0, 2).join('、') || '读一读，组个词'));
     }
     return out;
   }
@@ -293,7 +294,7 @@
         out.push(qItem('「' + ch + '」的正确读音是？', opts, ai, '读一读：' + ch + '，' + py + '。'));
       }
       /* 2) 笔画数 */
-      var n = (META[ch] || {}).n || 0;
+      var n = metaOf(ch).n || 0;
       if (n) {
         var cand = uniq([n, n + 1, n + 2, Math.max(1, n - 1), n + 3].map(String)).slice(0, 4);
         if (cand.length === 4) {

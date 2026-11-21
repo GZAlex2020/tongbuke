@@ -1,3 +1,4 @@
+<!-- 由 build.js 从 index.template.html 生成；资源版本 9b417b4b；请勿直接编辑 -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -21,35 +22,69 @@
   </div>
   <div id="modal-root"></div>
 
-  <!-- 配置层：学段 / 学科 / 教材目录 / 扩展骨架 -->
+  <!-- ===== A. 骨架层：仅 config 同步，保证 app.js 执行时 APP_CONFIG 已就绪 ===== -->
   <script src="js/config.js?v=1.6.0"></script>
-  <!-- 数据层：精编单元学习内容（46 个单元） -->
-  <script src="js/data-core.js?v=1.6.0"></script>
-  <script src="js/data-english.js?v=1.6.0"></script>
-  <script src="js/data-text.js?v=1.6.0"></script>
-  <!-- 初始化补充：为缺内置文本的单元补齐可跟读内容（古诗文 / 原创配套短文） -->
-  <script src="js/data-text-init.js?v=1.6.0"></script>
-  <!-- 离线汉字数据：精编生字 + 全学段目录标题字（笔顺 / 拼音 / 组词） -->
-  <script src="js/stroke-data.js?v=1.6.0"></script>
-  <script src="js/hanzi-meta.js?v=1.6.0"></script>
-  <script src="js/hanzi-extra.js?v=1.6.0"></script>
-  <script src="js/hanzi-grade56.js?v=1.6.0"></script>
-  <script src="js/hanzi-junior.js?v=1.6.0"></script>
-  <!-- 初中六大学科分科词库：物理 / 化学 / 生物 / 道德与法治 / 历史 / 地理 -->
-  <script src="js/data-subjects.js?v=1.6.0"></script>
-  <!-- 其余目录条目的「基础学习内容」生成器：让每一课都有六大模块可用内容 -->
-  <script src="js/data-basic.js?v=1.6.0"></script>
-  <!-- 引擎层：语音合成 / 笔顺动画 / 口算出题 -->
-  <script src="js/speech.js?v=1.6.0"></script>
-  <script src="vendor/hanzi-writer.min.js?v=1.6.0"></script>
-  <script src="js/strokes.js?v=1.6.0"></script>
-  <script src="js/math-drill.js?v=1.6.0"></script>
-  <!-- 引擎层：答题音效（Web Audio 即时合成，答对/答错声音提示） -->
-  <script src="js/sound.js?v=1.6.0"></script>
-  <!-- 应用层：渲染与交互，扩展内容时无需改动 -->
-  <script src="js/app.js?v=1.6.0"></script>
-  <!-- 可选：匿名访问上报（默认关闭，ENDPOINT 为空时零外联；部署 Worker 后启用） -->
-  <script src="js/analytics.js?v=1.6.0"></script>
+
+  <!-- ===== B. 首屏层：defer，不阻塞解析，DOMContentLoaded 前按序执行 ===== -->
+  <script defer src="js/data-core.js?v=1.6.0"></script>
+  <script defer src="js/data-english.js?v=1.6.0"></script>
+  <script defer src="js/data-text.js?v=1.6.0"></script>
+  <script defer src="js/data-text-init.js?v=1.6.0"></script>
+  <script defer src="js/data-subjects.js?v=1.6.0"></script>
+  <script defer src="js/data-basic.js?v=1.6.0"></script>
+  <script defer src="js/speech.js?v=1.6.0"></script>
+  <script defer src="js/math-drill.js?v=1.6.0"></script>
+  <script defer src="js/sound.js?v=1.6.0"></script>
+  <script defer src="js/analytics.js?v=1.6.0"></script>
+  <script defer src="js/app.js?v=1.6.0"></script>
+
+  <!-- ===== C. 字库层：不进首屏，由 loader 按需 + idle 预取 ===== -->
+  <script>
+  window.__HZ_VER__ = '1.6.0';
+  window.HZ_LIBS = [
+    'js/stroke-data.js',
+    'js/hanzi-meta.js',
+    'js/hanzi-extra.js',
+    'js/hanzi-grade56.js',
+    'js/hanzi-junior.js',
+    'vendor/hanzi-writer.min.js',
+    'js/strokes.js'
+  ];
+  window.__hzLoaded = false;   /* 是否已请求 */
+  window.__hzReady = false;    /* 是否已就绪 */
+  window.__hzPending = null;
+  window.loadHanzi = function (reason) {
+    if (window.__hzReady) return Promise.resolve();
+    if (window.__hzPending) return window.__hzPending;
+    window.__hzLoaded = true;
+    window.__hzPending = Promise.all(window.HZ_LIBS.map(function (src) {
+      return new Promise(function (res, rej) {
+        var code = (window.__HZ_INLINE__ || {})[src];
+        if (code != null) {
+          try { window.eval(code); res(); } catch (e) { rej(e); }
+          return;
+        }
+        var t = document.createElement('script');
+        t.src = src + (window.__HZ_VER__ && window.__HZ_VER__ !== '9b417b4b' ? '?v=' + window.__HZ_VER__ : '');
+        t.onload = res; t.onerror = rej;
+        document.head.appendChild(t);
+      });
+    })).then(function () {
+      window.__hzReady = true;
+      document.dispatchEvent(new CustomEvent('hanzi:ready', { detail: reason }));
+    }).catch(function (e) {
+      window.__hzLoaded = false;
+      window.__hzPending = null;
+      throw e;
+    });
+    return window.__hzPending;
+  };
+  /* 空闲预取：首屏渲染完 + 主线程空了再偷偷下；用户点「生字」时通常已就绪 */
+  addEventListener('load', function () {
+    var go = function () { window.loadHanzi('idle').catch(function () {}); };
+    ('requestIdleCallback' in window) ? requestIdleCallback(go, { timeout: 2500 }) : setTimeout(go, 1200);
+  });
+  </script>
 
   <!-- 缓存自检：若浏览器混用了新旧脚本，给出明确提示，避免显示串科的错乱页面 -->
   <script>
@@ -59,8 +94,9 @@
       var C = window.APP_CONFIG;
       var content = document.getElementById('content');
       var tabsBox = document.querySelector('.module-tabs');
+      /* 字库为异步加载，HANZI_PINYIN 不参与版本一致性判定，避免误报 */
       var bad = !C || C.version !== EXPECTED || !window.BasicData ||
-                !window.HANZI_PINYIN || !content || !content.children.length;
+                !content || !content.children.length;
       /* 锁定占位页本来就没有模块标签，属于正常情况，跳过比对 */
       if (!bad && tabsBox) {
         var btn = document.querySelector('.subject-btn.on');
