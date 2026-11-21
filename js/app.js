@@ -425,7 +425,7 @@
     h += '<div class="unit-hero-left"><div class="unit-badge">' + esc(S.volume) + '册 · 第 ' + (S.unitIndex + 1) + ' 单元' +
       (isBasicUnit() ? ' · 通用教学示范内容（非教材原文）' : '') + '</div>' +
       '<h1>' + esc(title) + '</h1>' +
-      '<p>' + esc(subj.textbook) + ' · ' + esc(C.gradeLabel(S.grade)) + esc(subj.label) + '</p></div>';
+      '<p>' + esc(C.textbookFor(S.grade, S.subject)) + ' · ' + esc(C.gradeLabel(S.grade)) + esc(subj.label) + '</p></div>';
     h += '<div class="unit-hero-right">' + (p.stars ? '<div class="hero-stars">' + starStr(p.stars) + '</div><small>最佳 ' + (p.best || 0) + ' 分</small>' : '<small>完成通关即可获得星级</small>') + '</div>';
     h += '</div>';
 

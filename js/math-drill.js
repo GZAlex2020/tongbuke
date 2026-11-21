@@ -141,6 +141,58 @@
       return make(a.toFixed(1) + ' + ' + b.toFixed(1) + ' = ?', s,
         [(a + b + 1).toFixed(1), (a + b - 1).toFixed(1), (a + b).toFixed(0)],
         '小数点对齐，按整数加法算，最后点上小数点。');
+    } },
+
+    /* ===== 初中题型（7—9 年级） ===== */
+    { id: 'rational', label: '有理数运算', level: 7, tip: '同号得正，异号得负', gen: function () {
+      var a = rnd(2, 15) * (rnd(0, 1) ? 1 : -1), b = rnd(2, 12) * (rnd(0, 1) ? 1 : -1), s = a + b;
+      return make('(' + (a >= 0 ? a : '(' + a + ')') + ') + (' + (b >= 0 ? b : b) + ') = ?', s,
+        [s + 2, s - 2, Math.abs(a) + Math.abs(b)], '同号相加取相同符号并把绝对值相加；异号相加取绝对值大的符号并用大减小。');
+    } },
+    { id: 'absvalue', label: '绝对值与相反数', level: 7, tip: '绝对值非负', gen: function () {
+      var a = rnd(3, 20) * (rnd(0, 1) ? 1 : -1);
+      return make('|' + a + '| = ?', Math.abs(a), [a, -Math.abs(a) - 1, Math.abs(a) + 1], '绝对值表示到原点的距离，一定非负。');
+    } },
+    { id: 'lineareq', label: '一元一次方程', level: 7, tip: '移项要变号', gen: function () {
+      var x = rnd(2, 12), a = rnd(2, 9), b = rnd(1, 20), c = a * x + b;
+      return make(a + 'x + ' + b + ' = ' + c + '，x = ?', x, [x + 1, x - 1, c - b], '先移项：' + a + 'x = ' + c + ' − ' + b + ' = ' + (c - b) + '，再两边除以 ' + a + '。');
+    } },
+    { id: 'polyadd', label: '整式加减', level: 7, tip: '合并同类项', gen: function () {
+      var a = rnd(2, 9), b = rnd(2, 9), c = rnd(1, 8);
+      return make(a + 'x + ' + b + 'x − ' + c + 'x = ?（填系数）', a + b - c,
+        [a + b + c, a - b - c, a + b], '同类项系数相加减，字母部分不变：(' + a + '+' + b + '−' + c + ')x。');
+    } },
+    { id: 'systemeq', label: '二元一次方程组', level: 8, tip: '加减消元', gen: function () {
+      var x = rnd(1, 9), y = rnd(1, 9);
+      return make('x + y = ' + (x + y) + '，x − y = ' + (x - y) + '，则 x = ?', x,
+        [y, x + 1, x - 1], '两式相加消去 y：2x = ' + (x + y) + '+(' + (x - y) + ') = ' + (2 * x) + '，所以 x = ' + x + '。');
+    } },
+    { id: 'pythagoras', label: '勾股定理', level: 8, tip: 'a²+b²=c²', gen: function () {
+      var triple = [[3,4,5],[6,8,10],[5,12,13],[8,15,17],[9,12,15],[7,24,25]];
+      var t = triple[rnd(0, triple.length - 1)];
+      return make('直角边 ' + t[0] + ' 与 ' + t[1] + '，斜边 = ?', t[2],
+        [t[2] + 1, t[2] - 1, t[0] + t[1]], '斜边² = ' + t[0] + '²+' + t[1] + '² = ' + (t[0]*t[0]+t[1]*t[1]) + '，开方得 ' + t[2] + '。');
+    } },
+    { id: 'factor', label: '因式分解', level: 8, tip: '平方差公式', gen: function () {
+      var a = rnd(2, 12), b = rnd(1, a - 1);
+      return make('x² − ' + (a * a) + ' = (x+' + a + ')(x−?)  填 ?', a,
+        [b, a + 1, a - 1], '平方差：x² − a² = (x+a)(x−a)，a = ' + a + '。');
+    } },
+    { id: 'quadratic', label: '一元二次方程', level: 9, tip: '因式分解法', gen: function () {
+      var r1 = rnd(1, 8), r2 = rnd(1, 8), s = r1 + r2, p = r1 * r2;
+      return make('x² − ' + s + 'x + ' + p + ' = 0 的较大根是 ?', Math.max(r1, r2),
+        [Math.min(r1, r2), s, p], '找两数积为 ' + p + '、和为 ' + s + '：' + r1 + ' 和 ' + r2 + '。');
+    } },
+    { id: 'functionval', label: '一次函数求值', level: 9, tip: '代入自变量', gen: function () {
+      var k = rnd(2, 9), b = rnd(1, 12), x = rnd(1, 8), y = k * x + b;
+      return make('y = ' + k + 'x + ' + b + '，当 x = ' + x + ' 时 y = ?', y,
+        [y + k, y - k, k * x], '把 x = ' + x + ' 代入：' + k + '×' + x + '+' + b + ' = ' + y + '。');
+    } },
+    { id: 'trig', label: '锐角三角函数', level: 9, tip: '特殊角记忆', gen: function () {
+      var set = [['30°', '1/2'], ['45°', '√2/2'], ['60°', '√3/2'], ['0°', '0'], ['90°', '1']];
+      var t = set[rnd(0, set.length - 1)];
+      return make('sin ' + t[0] + ' = ?', t[1], ['1/2', '√2/2', '√3/2'].filter(function (v) { return v !== t[1]; }).concat('0'),
+        '特殊角正弦值：sin30°=1/2，sin45°=√2/2，sin60°=√3/2。');
     } }
   ];
 
@@ -168,7 +220,20 @@
     '4|上|0': ['bignum', 'bigadd', 'compare'],
     '4|上|2': ['angle', 'mult1', 'mixed'],
     '4|下|2': ['ops', 'mult1', 'mixed'],
-    '4|下|3': ['decimal', 'fraction', 'bigadd']
+    '4|下|3': ['decimal', 'fraction', 'bigadd'],
+    /* 初中 7—9 年级 */
+    '7|上|0': ['rational', 'absvalue', 'decimal'],
+    '7|上|1': ['polyadd', 'rational', 'ops'],
+    '7|上|2': ['lineareq', 'rational', 'polyadd'],
+    '7|下|1': ['absvalue', 'rational'],
+    '7|下|3': ['lineareq', 'polyadd', 'rational'],
+    '8|上|2': ['polyadd', 'factor', 'ops'],
+    '8|下|1': ['pythagoras', 'rational'],
+    '8|下|4': ['systemeq', 'lineareq', 'functionval'],
+    '9|上|0': ['quadratic', 'factor'],
+    '9|上|1': ['functionval', 'quadratic'],
+    '9|下|1': ['functionval', 'trig'],
+    '9|下|2': ['trig', 'pythagoras']
   };
 
   function byId(id) {
@@ -253,6 +318,37 @@
       '三角形内角和是 180 度。',
       '小数加减要对齐小数点。',
       '小数的末尾添 0 或去 0，小数大小不变。'
+    ] },
+    /* 初中速查卡 */
+    { level: 7, title: '有理数运算', color: '#2f6fed', lines: [
+      '同号相加取相同符号，绝对值相加；异号相减取大的符号。',
+      '减去一个数等于加上它的相反数：a − b = a + (−b)。',
+      '绝对值 |a| 表示到原点的距离，永远非负。'
+    ] },
+    { level: 7, title: '一元一次方程', color: '#2f6fed', lines: [
+      '解方程步骤：去分母 → 去括号 → 移项 → 合并 → 系数化为 1。',
+      '移项一定要变号：+b 移到另一边变成 −b。',
+      '等式两边同加减乘除（非零），等式仍成立。'
+    ] },
+    { level: 8, title: '整式与因式分解', color: '#0f9d8c', lines: [
+      '同底数幂相乘：aᵐ · aⁿ = aᵐ⁺ⁿ。',
+      '平方差：a² − b² = (a+b)(a−b)。',
+      '完全平方：(a±b)² = a² ± 2ab + b²。'
+    ] },
+    { level: 8, title: '勾股定理', color: '#0f9d8c', lines: [
+      '直角三角形两直角边平方和等于斜边平方：a²+b²=c²。',
+      '常见勾股数：3,4,5；5,12,13；8,15,17；7,24,25。',
+      '逆定理：满足 a²+b²=c² 的三角形是直角三角形。'
+    ] },
+    { level: 9, title: '二次函数与方程', color: '#d98324', lines: [
+      '一元二次方程 ax²+bx+c=0，求根公式 x=(−b±√(b²−4ac))/(2a)。',
+      'Δ=b²−4ac：Δ>0 两不等实根，Δ=0 两相等，Δ<0 无实根。',
+      '二次函数 y=ax²+bx+c 顶点横坐标 x=−b/(2a)。'
+    ] },
+    { level: 9, title: '函数与三角函数', color: '#d98324', lines: [
+      '一次函数 y=kx+b：k>0 递增，k<0 递减。',
+      '反比例函数 y=k/x，图象是双曲线。',
+      '特殊角：sin30°=1/2，sin45°=√2/2，sin60°=√3/2。'
     ] }
   ];
 
