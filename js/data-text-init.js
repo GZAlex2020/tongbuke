@@ -69,7 +69,7 @@
     ] }]
   });
 
-  add('1|chinese|上|10', {
+  add('1|chinese|上|20', {
     kind: 'article', source: '原创配套跟读短文 · 非教材原文',
     title: '秋天来了', note: '按「天气 → 树叶 → 天空 → 大雁」的顺序读，读出季节变化。',
     sections: [{ title: '秋天来了', author: '', lines: [

@@ -1,4 +1,4 @@
-<!-- 由 build.js 从 index.template.html 生成；资源版本 9dc23d9a；请勿直接编辑 -->
+<!-- 由 build.js 从 index.template.html 生成；资源版本 c1b33ec1；请勿直接编辑 -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -7,7 +7,7 @@
   <!-- 版本号 v=1.6.0：每次改动资源后递增，避免浏览器把新旧脚本混用导致模块错乱 -->
   <meta name="description" content="广州中小学同步学习资料：小学 1—6 年级语文数学英语，初中 7—9 年级语数英及物理化学生物道德与法治历史地理，课前预习、课后复习、课本跟读、通关挑战，支持语音朗读。">
   <title>穗学伴 · 广州中小学同步学习资料</title>
-  <link rel="stylesheet" href="css/style.css?v=9dc23d9a">
+  <link rel="stylesheet" href="css/style.css?v=c1b33ec1">
 </head>
 <body>
   <div class="app">
@@ -20,24 +20,24 @@
   <div id="modal-root"></div>
 
   <!-- ===== A. 骨架层：仅 config 同步，保证 app.js 执行时 APP_CONFIG 已就绪 ===== -->
-  <script src="js/config.js?v=9dc23d9a"></script>
+  <script src="js/config.js?v=c1b33ec1"></script>
 
   <!-- ===== B. 首屏层：defer，不阻塞解析，DOMContentLoaded 前按序执行 ===== -->
-  <script defer src="js/data-core.js?v=9dc23d9a"></script>
-  <script defer src="js/data-english.js?v=9dc23d9a"></script>
-  <script defer src="js/data-text.js?v=9dc23d9a"></script>
-  <script defer src="js/data-text-init.js?v=9dc23d9a"></script>
-  <script defer src="js/data-subjects.js?v=9dc23d9a"></script>
-  <script defer src="js/data-basic.js?v=9dc23d9a"></script>
-  <script defer src="js/speech.js?v=9dc23d9a"></script>
-  <script defer src="js/math-drill.js?v=9dc23d9a"></script>
-  <script defer src="js/sound.js?v=9dc23d9a"></script>
-  <script defer src="js/analytics.js?v=9dc23d9a"></script>
-  <script defer src="js/app.js?v=9dc23d9a"></script>
+  <script defer src="js/data-core.js?v=c1b33ec1"></script>
+  <script defer src="js/data-english.js?v=c1b33ec1"></script>
+  <script defer src="js/data-text.js?v=c1b33ec1"></script>
+  <script defer src="js/data-text-init.js?v=c1b33ec1"></script>
+  <script defer src="js/data-subjects.js?v=c1b33ec1"></script>
+  <script defer src="js/data-basic.js?v=c1b33ec1"></script>
+  <script defer src="js/speech.js?v=c1b33ec1"></script>
+  <script defer src="js/math-drill.js?v=c1b33ec1"></script>
+  <script defer src="js/sound.js?v=c1b33ec1"></script>
+  <script defer src="js/analytics.js?v=c1b33ec1"></script>
+  <script defer src="js/app.js?v=c1b33ec1"></script>
 
   <!-- ===== C. 字库层：基础引擎 + 按年级小包，不进首屏 ===== -->
   <script>
-  window.__HZ_VER__ = '9dc23d9a';
+  window.__HZ_VER__ = 'c1b33ec1';
   /* 基础引擎很小：笔顺渲染器 + 元信息；字库小包按年级单独加载 */
   window.HZ_BASE = [
     'vendor/hanzi-writer.min.js',
@@ -63,7 +63,7 @@
         return;
       }
       var t = document.createElement('script');
-      t.src = src + (window.__HZ_VER__ && window.__HZ_VER__ !== '9dc23d9a' ? '?v=' + window.__HZ_VER__ : '');
+      t.src = src + (window.__HZ_VER__ && window.__HZ_VER__ !== 'c1b33ec1' ? '?v=' + window.__HZ_VER__ : '');
       t.onload = res; t.onerror = rej;
       document.head.appendChild(t);
     });

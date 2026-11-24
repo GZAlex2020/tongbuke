@@ -93,7 +93,7 @@
   });
 
   add('3|chinese|上|3', {
-    kind: 'poem', source: '公有领域古诗文 · 可全文跟读', title: '古诗三首', note: '三首写秋，注意「斜 xiá」「挑 tiǎo」等古诗读音以课本注音为准。',
+    kind: 'poem', source: '公有领域古诗文 · 可全文跟读', title: '古诗三首', note: '三首写秋，注意「斜 xié」「挑 tiǎo」等古诗读音以课本注音为准。',
     sections: [
       {
         title: '山行', author: '唐 · 杜牧',
